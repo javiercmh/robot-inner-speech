@@ -10,7 +10,7 @@
         result)))
 
 (setq *sentence* " ")
-;the global sentence tu produce during inner dialogue
+;the global sentence to produce during inner dialogue
 
 (define-model inner
 
@@ -52,7 +52,7 @@
    (plate ISA meaning word "plate" sense plate pos noun)
    (table ISA meaning word "table" sense table pos noun)
   
-
+  """ Create empty chunks"""
    (start ISA chunk)(detected-command-sound isa chunk)
    (detected-object-sound isa chunk) (encoded-command isa chunk)
    (start-inner isa chunk) (retrieving-meaning isa chunk)
@@ -65,6 +65,19 @@
   ;the productions for hearing command, object, adverbial and location sounds. Their source is always external
   ;for command
   (P detected-command-sound
+    """
+    check that the goal buffer is in the start state (The start of the program?)
+    check if the aural-location buffer has a chunk called audio-event with matching attributes
+    ask the aural buffer if it is free
+    ask the imaginal buffer if it is free 
+    ==>
+    push a request to the imaginal buffer (Changes it's state to busy?)
+    push a request to the aural buffer encode the event provided
+      -result of the encoding will be a chunk with slots specified by the chunk-type sound being placed into the aural buffer
+      -(chunk-type sound kind content event)
+      - kind slot used to indicate the type of sound encoded:can be a tone, digit, or word.
+    modify the goal buffer's state to 'detected-command-sound'
+    """
     
     =goal>
     state    start
@@ -89,7 +102,14 @@
   
   ;for object
   (P detected-object-sound
-    
+    """
+    check if goal buffer is in state 'encoded-command'
+    check if aural-location bufer has a chunk called audio-event with following attributes
+    ask the aural buffer if it is free
+    ==>
+    add chunk to the aural buffer assigning aural-location to the event slot
+    modifies the chunk in the goal buffer, chaning the state slot to 'detected-object-sound'
+    """
     =goal>
     state     encoded-command
 
@@ -112,7 +132,16 @@
 
   ;for adverb
   (P detected-adverbial-sound
-    
+    """
+    check if goal buffer state is 'encoded-obj'
+    check if aural-location bufer has a chunk called audio-event with following attributes
+    ask the aural buffer if it is free
+    dead code?
+    ==>
+    dead code?
+    add new chunk to the aural buffer chaning event slot to 'aural-location'
+    modify chunk in the goal slot state to 'detected-adverbial-sound'
+    """
     =goal>
     state     encoded-obj
 
@@ -122,9 +151,9 @@
        location external
     ?aural>
        state   free
-    =imaginal>
+    =imaginal> ;needed?
     ==>
-    =imaginal>
+    =imaginal> ;needed?
     +aural>
       event =aural-location
 
@@ -136,6 +165,17 @@
 ;for location
 (P detected-location-sound
     
+  """
+  check if goal buffer is in state encoded-adverb
+  check if aural-location bufer has a chunk called audio-event with following attributes
+  ask the aural buffer if it is free
+  dead code?
+  ==>
+  dead code?
+  add new chunk to the aural buffer chaning event slot to 'aural-location'
+  modify chunk in the goal slot state to 'detected-location-sound'
+  """
+
     =goal>
     state     encoded-adverb
 
@@ -145,9 +185,9 @@
        location external
     ?aural>
        state   free
-    =imaginal>
+    =imaginal> ;needed?
     ==>
-    =imaginal>
+    =imaginal> ;needed?
     +aural>
       event =aural-location
 
@@ -160,6 +200,13 @@
  ;production rules inferring the sense of the perceived command
  ;understand the command 
    (P retrieve-meaning-verb
+   """
+  check if goal buffer is in state detected-command-sound
+  check if a chunk in the aural buffer is a sound chunk type with something in the content slot and assign it to the variable =word
+  ==>
+  Add a new chunk to the retrieval buffer 
+    -chunk-type meaning, assign =word to the word slot and assign the pos slot to be verb 
+   """
      =goal>
        state      detected-command-sound
      
@@ -176,7 +223,13 @@
 
   ;understand the object
    (P retrieve-meaning-object
-
+    """
+    check if goal buffer is in state detected-object-sound
+    check if a chunk in the aural buffer is a sound chunk type with something in the content slot and assign it to the variable =word
+    ==>
+    Add a new chunk to the retrieval buffer 
+      -chunk-type meaning, assign =word to the word slot and assign the pos slot to be noun 
+   """
      =goal>
      state    detected-object-sound
      =aural>
@@ -191,16 +244,24 @@
   
   ;understand the location
    (P retrieve-meaning-location
-
+    """
+    check if goal buffer is in state detected-location-sound
+    check if a chunk in the aural buffer is a sound chunk type with something in the content slot and assign it to the variable =word
+    dead code?
+    ==>
+    dead code?
+    Add a new chunk to the retrieval buffer 
+      -chunk-type meaning, assign =word to the word slot and assign the pos slot to be noun 
+   """
      =goal>
      state    detected-location-sound
      =aural>
         ISA        sound
         content    =word
-     =imaginal>
+     =imaginal> ;needed?
      ==>
-     =imaginal>
-      +retrieval>
+     =imaginal> ;needed?
+     +retrieval>
         ISA         meaning
         word        =word
         pos         noun
@@ -208,26 +269,49 @@
     
     ;understand the adverb
     (P retrieve-meaning-adverb
-
+      """
+      check if goal buffer is in state detected-location-sound
+      check if a chunk in the aural buffer is a sound chunk type with something in the content slot and assign it to the variable =word
+      dead code?
+      ==>
+      dead code?
+      Add a new chunk to the retrieval buffer 
+      -chunk-type meaning, assign =word to the word slot and assign the pos slot to be avd(adverb)
+      """
      =goal>
      state    detected-adverbial-sound
      =aural>
         ISA        sound
         content    =word
-     =imaginal>
+     =imaginal> ;needed?
      ==>
-     =imaginal>
-      +retrieval>
-        ISA         meaning
-        word        =word
-        pos         adv
+     =imaginal> ;needed?
+     +retrieval>
+       ISA         meaning
+       word        =word
+       pos         adv
     )
 
  
  ;productions for encoding the sound
  ;for encoding command sound
  (P encode-command
-
+    """
+    check if goal buffer is in state detected-command-sound
+    check if the chunk in the retrieval buffer has a value in the slots word and act and assign them to variables
+      -also check if pos is the value 'verb'
+    check if the chunk in the imaginal buffer is a 'comprehend-voo' and that the slot verb is empty
+    ==>
+    modify the chunk in the imaginal buffer and assign the value of variable =retrieval...which doesn't exist?
+    create a new chunk in the imaginal buffer 
+      -chunk-type audio-event, asiign word to kind slot and external to location slot 
+    !eval! command
+      -The !eval! condition is provided to allow the modeler to add any arbitrary conditions to the LHS of a 
+       production or to perform some side effects (like data collection or model tracking information).
+      -add to global sentence for inner speech (see line 12) string 'I have to' and the value of variable =act
+    output 'I have to' and the value of =act
+    modify state slot in goal buffer to ' encoded-command'
+    """
      =goal>
        state      detected-command-sound
 
@@ -245,7 +329,7 @@
      ==>
 
      =imaginal>
-        verb        =retrieval
+        verb        =retrieval ; ...what? No variable =retreival created on the RHS
 
      +aural-location>
         ISA      audio-event
