@@ -96,4 +96,4 @@ def AL_tts():
     tts.say("Hello my name is Pepper")
 
 #AL_tts()
-#demo_table()
+demo_table()
