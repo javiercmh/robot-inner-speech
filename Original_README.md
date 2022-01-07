@@ -1,29 +1,22 @@
-# Robot inner speech
+# robot-inner-speech
+The repository was built as additional material of the paper entitled "What robots want? Hearing the inner voice of a robot" by Arianna Pipitone and Antonio Chella to the open access journal iScience from Cell Press.
 
-## About this fork
+The framework provides robots with inner speech skill. 
+It is based on ACT-R architecture. 
 
-This fork modifies the repository built as additional material for the paper "What robots want? Hearing the inner voice of a robot" by Arianna Pipitone and Antonio Chella. Link to the original paper [here](https://www.sciencedirect.com/science/article/pii/S2589004221003394).
-
-Fore more information, refer to the `Original_README.md` file.
-
-## About the original repository
-
-This project allows the robot to communicate its "thoughts" out loud while performing a task. This is defined as the robot's inner speech.
-
-It is based on [ACT-R](http://act-r.psy.cmu.edu/) architecture.
-
-The code is contained in the `INNER` folder.
-
-- `INNER/inner_model.lisp`: contains the knowledge and the rules implementing the inner speech ability for robot in the cooperative scenario to set a table. 
-- `INNER/demo.py`: contains a working example of the model in action.
+Please, read the files in the INNER folder for details about the code of the model.
+It contains the knowledge and the rules implementing the inner speech ability for robot in the cooperative scenario to set a table. 
+You can add further declarative facts for extending knowledge.
 
 You can try the inner speech model by just running ACT-R, or by integrating it to real robot.
 
-## Running inner speech model in ACT-R (without robot)
+Running inner speech model in ACT-R (without robot)
+=====================================================
 
 To run ACT-R inner speech model, you need:
-   - ACT-R architecture ([standalone version](http://act-r.psy.cmu.edu/software/)) 
-   - Python 3.x
+   - `ACT-R architecture (standalone version) <http://act-r.psy.cmu.edu/software/>`
+   - `Python 2.x or 3.x`
+   - `Clozure common Lisp, as required in ACT-R standalone version`
 
 Put the ACT-R folder in your preferred location path your-path.
 
