@@ -25,46 +25,41 @@ To run ACT-R inner speech model, you need:
    - ACT-R architecture ([standalone version](http://act-r.psy.cmu.edu/software/)) 
    - Python 3
 
-Put the ACT-R folder in your preferred location path your-path.
+Put the ACT-R folder in your preferred location.
 
-Download the INNER folder and put it under the actr7.x folder of your ACT-R installation.
+Download this repository and put it into `~/Documents/`.
 
-Launch ACT-R in the common lisp shell, like this:
+From a terminal, go to the ACT-R directory and run the software:
 
-    (load "..your-path.../act-r/actr7.x/load-act-r.lisp")
+    $ ./run-act-r.command
+
+If it fails, it might be that you need to give it executable permissions first:
+
+    $ chmod +x run-act-r.command
  
-Run the Python code under INNER folder, like this (you have to write these lines in the Python interpreter shell):
+Back to the repository folder, run the Python code `demo.py`.
 
-    import inner_model
-    inner_model.demo_table()
- 
 Now you can see the model working in your ACT-R console.
 
-You can hear the inner speech dialogue by installing the SpeechRecognition Python library at
+You can hear the inner speech dialogue by installing the [SpeechRecognition](https://pypi.org/project/SpeechRecognition/) Python library with:
+    
+        $ pip install SpeechRecognition
 
- <https://pypi.org/project/SpeechRecognition/>
+After SpeechRecognition installation, when you run the model you should hear the inner dialogue produced by your machine.
 
-After SpeechRecognition installation, when you run the model you can hear the inner dialogue produced by your machine.
+## Running inner speech model on real robot
 
-Running inner speech model on real robot
-==========================================
-
-Prerequisites
--------------
+### Prerequisites
 
 Operative systems:
 
-- Ubuntu 16.04 LTS or latest
+- Ubuntu 16.04 LTS or newer, or Windows with [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-manual)
 
-- Windows with Windows Subsystem for Linux (WSL) with Ubuntu 16.04 LTS or latest 
-(you can follow the official instructions available at <https://docs.microsoft.com/en-us/windows/wsl/install-manual> for enabling WSL)
-
-For integrating the framework on Pepper robot, just ROS kinetic version is required (that is the ROS version for MoveIt! library), which runs on Ubuntu 16.04 LTS.
+- For integrating the framework on Pepper robot, just ROS kinetic version is required (that is the ROS version for MoveIt! library), which runs on Ubuntu 16.04 LTS.
 
 If you will use a different robot model, please verify the suitable ROS version, and the corresponding Ubuntu version.
 
-1 Prepare the environment
--------------------------
+### 1 Prepare the environment
 
 - Install ACT-R architecture and the inner speech model
 
@@ -73,16 +68,11 @@ Please, follow the instructions of the previous case (running inner speech model
 
 - Install MoveIt! (which requires ROS)
 
-Follow the instructions available at 
-
-http://docs.ros.org/kinetic/api/moveit_tutorials/html/doc/getting_started/getting_started.html
-
-This is a complete guide which allows you to install the complete framework for running ROS and enabling robot movements during interaction.
-Keep attention about ROS version
+This is a [complete guide](http://docs.ros.org/kinetic/api/moveit_tutorials/html/doc/getting_started/getting_started.html) which allows you to install the complete framework for running ROS and enabling robot movements during interaction. Pay attention to the ROS version.
 
 -  Install the configuration file of your robot
 
-You can find or built your own robot model by following the instuctions of the previous step in the section "Robot model and Robot state"
+You can find or built your own robot model by following the instuctions of the previous step in the section "[Robot model and Robot state](http://docs.ros.org/en/kinetic/api/moveit_tutorials/html/doc/robot_model_and_robot_state/robot_model_and_robot_state_tutorial.html)".
 
 For Pepper, you can use the pepper_moveit_config package available at
 

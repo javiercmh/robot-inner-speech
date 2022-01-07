@@ -1,5 +1,6 @@
 import actr
 import pyttsx3
+import speech_recognition as sr
 from tokenizer import tokenize, TOK
 
 #from naoqi import ALProxy
@@ -57,22 +58,27 @@ def speech_recognition() :
 
 
 def demo_table() :
+    """ Run the ACT-R model.
+
+    It starts with an order or command to the robot (e.g. "put napkin near table") and ends with 
+    """
+
     actr.reset()
     #init()
 
-    #...when manually setting the sentence (without syntetizer)
+    # ...when manually setting the sentence (without synthesizer)
     text = "put napkin near table"
 
-    #...when using Aldebran proxy for speech recognition
+    # ...when using Aldebran proxy for speech recognition
     #text = AL_speech_recognition()
 
-    #...when using Google Api (no Python 2.7)
+    # ...when using Google Api (no Python 2.7)
     #text = GAPI_speech_recognition()
 
     string = tokenize(text)
     onset = 0
     actr.set_parameter_value(":sound-decay-time", 0.4) #0.3 thread 1
-    #actr.set_parameter_value(":save-audicon-history", True)
+    # actr.set_parameter_value(":save-audicon-history", True)
     actr.add_command("inner-speech-response",record_model_speech, "Inner speech model response")
     actr.monitor_command("output-speech","inner-speech-response")
     actr.install_device(["speech","microphone"])
