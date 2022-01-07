@@ -23,7 +23,7 @@ You can try the inner speech model by just running ACT-R, or by integrating it t
 
 To run ACT-R inner speech model, you need:
    - ACT-R architecture ([standalone version](http://act-r.psy.cmu.edu/software/)) 
-   - Python 3.x
+   - Python 3
 
 Put the ACT-R folder in your preferred location path your-path.
 
