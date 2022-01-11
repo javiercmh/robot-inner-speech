@@ -365,7 +365,7 @@
       the production with the exception of not being able to use it in a slot name position. - ACT-R reference guide
      - binds the variable *sentence* to variable =sentence
     request the vocal buffer to change the value of cmd to speak and the vaue of string to new =sentence variable
-    output - Devo and the variables =action and =word
+    output - 'I must' and the variables =action and =word
     Modify the chunk in the imaginal buffer; slot object to variable retrieval
     Add new chunk to the goal buffer; state slot to encoded-obj
     
@@ -417,7 +417,7 @@
      ==>
      binds the variable *sentence* to variable =sentence
      Add new chunk to the vocal buffer to change the value of cmd to speak and the vaue of string to new =sentence variable
-     output - Devo and the variables =action, =obj, and =word
+     output - 'I must' and the variables =action, =obj, and =word
      Modify the chunk in the imaginal buffer; slot object to variable retrieval
      Add new chunk to the goal buffer; state slot to encoded-location
      """
