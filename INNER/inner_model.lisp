@@ -34,9 +34,7 @@
    (p1 ISA comprehend-voo verb give object napkin adverb nil location nil)
    (p2 ISA relation kind in arg1 napkin arg2 box symb "The napkin is in the box")
    (p3 ISA inner-etiquette-question pos on obj1 napkin obj2 plate symb "The napkin has to stay on the plate")
-   (p4 ISA inner-wh
-       
-       ere obj napkin place basket)
+   (p4 ISA inner-where obj napkin place basket)
    (p5 ISA comprehend-voo verb put object napkin adverb on location plate)
   
    
