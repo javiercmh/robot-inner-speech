@@ -67,7 +67,7 @@ def demo_table() :
     #init()
 
     # ...when manually setting the sentence (without synthesizer)
-    text = "put napkin near table"
+    text = "put napkin near basket"
 
     # ...when using Aldebran proxy for speech recognition
     #text = AL_speech_recognition()
@@ -83,7 +83,7 @@ def demo_table() :
     actr.monitor_command("output-speech","inner-speech-response")
     actr.install_device(["speech","microphone"])
     actr.add_command("motor-response",record_model_motor, "Motor model response")
-    actr.monitor_command("pech","motor-response")
+    # actr.monitor_command("pech", "motor-response")    # dead code? the command "pech" does not exist thus it cannot be monitored
     for word in string:
         if TOK.descr[word.kind] == "WORD" :
             print(str(word.txt))

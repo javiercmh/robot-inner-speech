@@ -3,7 +3,7 @@
 (defun concatString (list)
   "A non-recursive function that concatenates a list of strings."
   (if (listp list)
-      (let ((result ""))
+      (let ((result " "))
         (dolist (item list)
           (if (stringp item)
               (setq result (concatenate 'string result item))))
@@ -389,7 +389,7 @@
       ;+vocal>
         ;cmd         speak
         ;string      =sentence
-     !output!    (Devo =action =word)
+     !output!    (I have to =action =word)
       
       =imaginal>
         object      =retrieval ; 2, No variable =retreival created on the RHS
@@ -440,7 +440,7 @@
       +vocal>
         cmd         speak
         string      =sentence ;first turn of inner dialogue
-        !output!    (Devo =action =obj =word)
+        !output!    (I have to =action =obj =word)
       
       =imaginal>
         location      =retrieval
@@ -527,7 +527,7 @@
     +vocal>
     cmd speak
     string   "What does the etiquette require?"
-    !output! (Cosa prevede il galateo per =obj)
+    !output! (What is the etiquette required for =obj)
     +retrieval>
        ISA      inner-etiquette-question 
        obj1     =obj
@@ -689,7 +689,7 @@
     ==>
 
     =imaginal>;dead code?
-    !eval! (setq *sentence* (concatenate 'string *sentence*  =word " and not "))
+    !eval! (setq *sentence* (concatenate 'string *sentence* " " =word " and not "))  ;; this extra " " should split the word "onplate"
     +retrieval>
        ISA meaning
        sense  =loc
