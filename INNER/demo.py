@@ -5,7 +5,7 @@ from tokenizer import tokenize, TOK
 
 #from naoqi import ALProxy
 
-actr.load_act_r_model("ACT-R:INNER;DemoiScience;inner_model.lisp")
+actr.load_act_r_model("~/Documents/robot-inner-speech/INNER/inner_model.lisp")
 
 global response, response_time
 response = ''
@@ -30,7 +30,7 @@ def speech(response):
     engine.runAndWait()
     engine.stop()
     
-def speech_recognition() :
+def speech_recognition():
     #actr.reset()
     # obtain audio from the microphone
     r = sr.Recognizer()

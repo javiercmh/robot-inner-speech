@@ -1,7 +1,7 @@
 (clear-all)
 
 (defun concatString (list)
-  "A non-recursive function that concatenates a list of strings."
+;;   "A non-recursive function that concatenates a list of strings."
   (if (listp list)
       (let ((result " "))
         (dolist (item list)
@@ -52,7 +52,7 @@
    (plate ISA meaning word "plate" sense plate pos noun)
    (table ISA meaning word "table" sense table pos noun)
   
-  """ Create empty chunks"""
+;;   """ Create empty chunks"""
    (start ISA chunk)(detected-command-sound isa chunk)
    (detected-object-sound isa chunk) (encoded-command isa chunk)
    (start-inner isa chunk) (retrieving-meaning isa chunk)
@@ -65,19 +65,19 @@
   ;the productions for hearing command, object, adverbial and location sounds. Their source is always external
   ;for command
   (P detected-command-sound
-    """
-    check that the goal buffer is in the start state (The start of the program?)
-    check if the aural-location buffer has a chunk called audio-event with matching attributes
-    ask the aural buffer if it is free
-    ask the imaginal buffer if it is free 
-    ==>
-    push a request to the imaginal buffer (Changes it's state to busy?)
-    push a request to the aural buffer encode the event provided
-      -result of the encoding will be a chunk with slots specified by the chunk-type sound being placed into the aural buffer
-      -(chunk-type sound kind content event)
-      - kind slot used to indicate the type of sound encoded:can be a tone, digit, or word.
-    modify the goal buffer's state to 'detected-command-sound'
-    """
+    ;; """
+    ;; check that the goal buffer is in the start state (The start of the program?)
+    ;; check if the aural-location buffer has a chunk called audio-event with matching attributes
+    ;; ask the aural buffer if it is free
+    ;; ask the imaginal buffer if it is free 
+    ;; ==>
+    ;; push a request to the imaginal buffer (Changes it's state to busy?)
+    ;; push a request to the aural buffer encode the event provided
+    ;;   -result of the encoding will be a chunk with slots specified by the chunk-type sound being placed into the aural buffer
+    ;;   -(chunk-type sound kind content event)
+    ;;   - kind slot used to indicate the type of sound encoded:can be a tone, digit, or word.
+    ;; modify the goal buffer's state to 'detected-command-sound'
+    ;; """
     
     =goal>
     state    start
@@ -102,14 +102,14 @@
   
   ;for object
   (P detected-object-sound
-    """
-    check if goal buffer is in state 'encoded-command'
-    check if aural-location bufer has a chunk called audio-event with following attributes
-    ask the aural buffer if it is free
-    ==>
-    add chunk to the aural buffer assigning aural-location to the event slot
-    modifies the chunk in the goal buffer, chaning the state slot to 'detected-object-sound'
-    """
+    ;; """
+    ;; check if goal buffer is in state 'encoded-command'
+    ;; check if aural-location bufer has a chunk called audio-event with following attributes
+    ;; ask the aural buffer if it is free
+    ;; ==>
+    ;; add chunk to the aural buffer assigning aural-location to the event slot
+    ;; modifies the chunk in the goal buffer, chaning the state slot to 'detected-object-sound'
+    ;; """
     =goal>
     state     encoded-command
 
@@ -132,16 +132,16 @@
 
   ;for adverb
   (P detected-adverbial-sound
-    """
-    check if goal buffer state is 'encoded-obj'
-    check if aural-location bufer has a chunk called audio-event with following attributes
-    ask the aural buffer if it is free
-    dead code?
-    ==>
-    dead code?
-    add new chunk to the aural buffer chaning event slot to 'aural-location'
-    modify chunk in the goal slot state to 'detected-adverbial-sound'
-    """
+    ;; """
+    ;; check if goal buffer state is 'encoded-obj'
+    ;; check if aural-location bufer has a chunk called audio-event with following attributes
+    ;; ask the aural buffer if it is free
+    ;; dead code?
+    ;; ==>
+    ;; dead code?
+    ;; add new chunk to the aural buffer chaning event slot to 'aural-location'
+    ;; modify chunk in the goal slot state to 'detected-adverbial-sound'
+    ;; """
     =goal>
     state     encoded-obj
 
@@ -165,16 +165,16 @@
 ;for location
 (P detected-location-sound
     
-  """
-  check if goal buffer is in state encoded-adverb
-  check if aural-location bufer has a chunk called audio-event with following attributes
-  ask the aural buffer if it is free
-  dead code?
-  ==>
-  dead code?
-  add new chunk to the aural buffer chaning event slot to 'aural-location'
-  modify chunk in the goal slot state to 'detected-location-sound'
-  """
+;;   """
+;;   check if goal buffer is in state encoded-adverb
+;;   check if aural-location bufer has a chunk called audio-event with following attributes
+;;   ask the aural buffer if it is free
+;;   dead code?
+;;   ==>
+;;   dead code?
+;;   add new chunk to the aural buffer chaning event slot to 'aural-location'
+;;   modify chunk in the goal slot state to 'detected-location-sound'
+;;   """
 
     =goal>
     state     encoded-adverb
@@ -200,13 +200,13 @@
  ;production rules inferring the sense of the perceived command
  ;understand the command 
    (P retrieve-meaning-verb
-   """
-  check if goal buffer is in state detected-command-sound
-  check if a chunk in the aural buffer is a sound chunk type with something in the content slot and assign it to the variable =word
-  ==>
-  Add a new chunk to the retrieval buffer 
-    -chunk-type meaning, assign =word to the word slot and assign the pos slot to be verb 
-   """
+;;    """
+;;   check if goal buffer is in state detected-command-sound
+;;   check if a chunk in the aural buffer is a sound chunk type with something in the content slot and assign it to the variable =word
+;;   ==>
+;;   Add a new chunk to the retrieval buffer 
+;;     -chunk-type meaning, assign =word to the word slot and assign the pos slot to be verb 
+;;    """
      =goal>
        state      detected-command-sound
      
@@ -223,13 +223,13 @@
 
   ;understand the object
    (P retrieve-meaning-object
-    """
-    check if goal buffer is in state detected-object-sound
-    check if a chunk in the aural buffer is a sound chunk type with something in the content slot and assign it to the variable =word
-    ==>
-    Add a new chunk to the retrieval buffer 
-      -chunk-type meaning, assign =word to the word slot and assign the pos slot to be noun 
-   """
+;;     """
+;;     check if goal buffer is in state detected-object-sound
+;;     check if a chunk in the aural buffer is a sound chunk type with something in the content slot and assign it to the variable =word
+;;     ==>
+;;     Add a new chunk to the retrieval buffer 
+;;       -chunk-type meaning, assign =word to the word slot and assign the pos slot to be noun 
+;;    """
      =goal>
      state    detected-object-sound
      =aural>
@@ -244,15 +244,15 @@
   
   ;understand the location
    (P retrieve-meaning-location
-    """
-    check if goal buffer is in state detected-location-sound
-    check if a chunk in the aural buffer is a sound chunk type with something in the content slot and assign it to the variable =word
-    dead code?
-    ==>
-    dead code?
-    Add a new chunk to the retrieval buffer 
-      -chunk-type meaning, assign =word to the word slot and assign the pos slot to be noun 
-   """
+;;     """
+;;     check if goal buffer is in state detected-location-sound
+;;     check if a chunk in the aural buffer is a sound chunk type with something in the content slot and assign it to the variable =word
+;;     dead code?
+;;     ==>
+;;     dead code?
+;;     Add a new chunk to the retrieval buffer 
+;;       -chunk-type meaning, assign =word to the word slot and assign the pos slot to be noun 
+;;    """
      =goal>
      state    detected-location-sound
      =aural>
@@ -269,15 +269,15 @@
     
     ;understand the adverb
     (P retrieve-meaning-adverb
-      """
-      check if goal buffer is in state detected-location-sound
-      check if a chunk in the aural buffer is a sound chunk type with something in the content slot and assign it to the variable =word
-      dead code?
-      ==>
-      dead code?
-      Add a new chunk to the retrieval buffer 
-      -chunk-type meaning, assign =word to the word slot and assign the pos slot to be avd(adverb)
-      """
+    ;;   """
+    ;;   check if goal buffer is in state detected-location-sound
+    ;;   check if a chunk in the aural buffer is a sound chunk type with something in the content slot and assign it to the variable =word
+    ;;   dead code?
+    ;;   ==>
+    ;;   dead code?
+    ;;   Add a new chunk to the retrieval buffer 
+    ;;   -chunk-type meaning, assign =word to the word slot and assign the pos slot to be avd(adverb)
+    ;;   """
      =goal>
      state    detected-adverbial-sound
      =aural>
@@ -296,24 +296,24 @@
  ;productions for encoding the sound
  ;for encoding command sound
  (P encode-command
-    """
-    check if goal buffer is in state detected-command-sound
-    check if the chunk in the retrieval buffer has a value in the slots word and act and assign them to variables
-      -also check if pos is the value 'verb'
-    check if the chunk in the imaginal buffer is a 'comprehend-voo' and that the slot verb is empty
-    check staus of vocal buffer if state is free
-    ==>
-    modify the chunk in the imaginal buffer and assign the value of variable =retrieval...which doesn't exist?
-    create a new chunk in the imaginal buffer 
-      -chunk-type audio-event, asiign word to kind slot and external to location slot 
-    !eval! command
-      -The !eval! condition is provided to allow the modeler to add any arbitrary conditions to the LHS of a 
-       production or to perform some side effects (like data collection or model tracking information). - ACT-R reference guide
-      -setq - sets value of a variable, *sentence* in this case
-      -add to global sentence for inner speech (see line 12) string 'I have to' and the value of variable =act
-    output 'I have to' and the value of =act
-    modify state slot in goal buffer to ' encoded-command'
-    """
+    ;; """
+    ;; check if goal buffer is in state detected-command-sound
+    ;; check if the chunk in the retrieval buffer has a value in the slots word and act and assign them to variables
+    ;;   -also check if pos is the value 'verb'
+    ;; check if the chunk in the imaginal buffer is a 'comprehend-voo' and that the slot verb is empty
+    ;; check staus of vocal buffer if state is free
+    ;; ==>
+    ;; modify the chunk in the imaginal buffer and assign the value of variable =retrieval...which doesn't exist?
+    ;; create a new chunk in the imaginal buffer 
+    ;;   -chunk-type audio-event, asiign word to kind slot and external to location slot 
+    ;; !eval! command
+    ;;   -The !eval! condition is provided to allow the modeler to add any arbitrary conditions to the LHS of a 
+    ;;    production or to perform some side effects (like data collection or model tracking information). - ACT-R reference guide
+    ;;   -setq - sets value of a variable, *sentence* in this case
+    ;;   -add to global sentence for inner speech (see line 12) string 'I have to' and the value of variable =act
+    ;; output 'I have to' and the value of =act
+    ;; modify state slot in goal buffer to ' encoded-command'
+    ;; """
      =goal>
        state      detected-command-sound
 
@@ -351,23 +351,23 @@
 
   ;for econding object sound
   (P encode-object
-    """
-    check if goal buffer is in state detected-object-sound
-    check if the chunk in the retrieval buffer has a value in the slot word and assign it to =word; and slot pos has value of 'noun'
-    check if the chunk in the imaginal buffer is a 'comprehend-voo', verb has a value and assign value to =action, and that the slot object is empty
-    check staus of vocal buffer if state is free
-    eval command,set variable sentence to be a string of variable sentence, a space ,and value of =word
-    ==>
-    !bind! command 
-     - !bind! the return value of the evaluation is saved in a variable of the production which can then be used like other variables in 
-      the production with the exception of not being able to use it in a slot name position. - ACT-R reference guide
-     - binds the variable *sentence* to variable =sentence
-    request the vocal buffer to change the value of cmd to speak and the vaue of string to new =sentence variable
-    output - 'I must' and the variables =action and =word
-    Modify the chunk in the imaginal buffer; slot object to variable retrieval
-    Add new chunk to the goal buffer; state slot to encoded-obj
+    ;; """
+    ;; check if goal buffer is in state detected-object-sound
+    ;; check if the chunk in the retrieval buffer has a value in the slot word and assign it to =word; and slot pos has value of 'noun'
+    ;; check if the chunk in the imaginal buffer is a 'comprehend-voo', verb has a value and assign value to =action, and that the slot object is empty
+    ;; check staus of vocal buffer if state is free
+    ;; eval command,set variable sentence to be a string of variable sentence, a space ,and value of =word
+    ;; ==>
+    ;; !bind! command 
+    ;;  - !bind! the return value of the evaluation is saved in a variable of the production which can then be used like other variables in 
+    ;;   the production with the exception of not being able to use it in a slot name position. - ACT-R reference guide
+    ;;  - binds the variable *sentence* to variable =sentence
+    ;; request the vocal buffer to change the value of cmd to speak and the vaue of string to new =sentence variable
+    ;; output - 'I must' and the variables =action and =word
+    ;; Modify the chunk in the imaginal buffer; slot object to variable retrieval
+    ;; Add new chunk to the goal buffer; state slot to encoded-obj
     
-    """
+    ;; """
      
      =goal>
        state      detected-object-sound
@@ -402,23 +402,23 @@
   ;for encoding location
   ;at the end of the encoding of the whole sentence, the inner dialogue starts
   (P encode-location
-     """
-     check if goal buffer is in state detected-object-sound
-     check if the chunk in the retrieval buffer has a value in the slot word and assign it to =word; and slot pos has value of 'noun'
-     check if the chunk in the imaginal buffer is a 'comprehend-voo'
-      -verb has a value and assign value to =action 
-      -object has a value and assign value to =obj
-      -adverb has a value and assign value to =adv
-      -location is empty
-     check staus of vocal buffer if state is free
-     eval command,set variable sentence to be a string of variable sentence and value of =word
-     ==>
-     binds the variable *sentence* to variable =sentence
-     Add new chunk to the vocal buffer to change the value of cmd to speak and the vaue of string to new =sentence variable
-     output - 'I must' and the variables =action, =obj, and =word
-     Modify the chunk in the imaginal buffer; slot object to variable retrieval
-     Add new chunk to the goal buffer; state slot to encoded-location
-     """
+    ;;  """
+    ;;  check if goal buffer is in state detected-object-sound
+    ;;  check if the chunk in the retrieval buffer has a value in the slot word and assign it to =word; and slot pos has value of 'noun'
+    ;;  check if the chunk in the imaginal buffer is a 'comprehend-voo'
+    ;;   -verb has a value and assign value to =action 
+    ;;   -object has a value and assign value to =obj
+    ;;   -adverb has a value and assign value to =adv
+    ;;   -location is empty
+    ;;  check staus of vocal buffer if state is free
+    ;;  eval command,set variable sentence to be a string of variable sentence and value of =word
+    ;;  ==>
+    ;;  binds the variable *sentence* to variable =sentence
+    ;;  Add new chunk to the vocal buffer to change the value of cmd to speak and the vaue of string to new =sentence variable
+    ;;  output - 'I must' and the variables =action, =obj, and =word
+    ;;  Modify the chunk in the imaginal buffer; slot object to variable retrieval
+    ;;  Add new chunk to the goal buffer; state slot to encoded-location
+    ;;  """
      
      =goal>
        state      detected-location-sound
@@ -451,21 +451,21 @@
     )
 
   (P encode-adverb
-    """
-    check if goal buffer is in state detected-adverbial-sound
-    check if the chunk in the retrieval buffer has a value in the slot word and assign it to =word; and slot pos has value of 'adv'
-    check if the chunk in the imaginal buffer is a 'comprehend-voo'
-      -verb has a value and assign value to =action 
-      -object has a value and assign value to =obj
-      -adverb is empty
-    check staus of vocal buffer if state is free
-    eval command,set variable sentence to be a string of variable sentence and value of =word and ' the '
-    ==>
-    binds the variable *sentence* to variable =sentence
-    Add new chunk to the vocal buffer to change the value of cmd to speak and the vaue of string to new =sentence variable
-    Modify the chunk in the imaginal buffer; slot adverb to variable retrieval
-    Add new chunk to the goal buffer; state slot to encoded-adverb
-    """
+    ;; """
+    ;; check if goal buffer is in state detected-adverbial-sound
+    ;; check if the chunk in the retrieval buffer has a value in the slot word and assign it to =word; and slot pos has value of 'adv'
+    ;; check if the chunk in the imaginal buffer is a 'comprehend-voo'
+    ;;   -verb has a value and assign value to =action 
+    ;;   -object has a value and assign value to =obj
+    ;;   -adverb is empty
+    ;; check staus of vocal buffer if state is free
+    ;; eval command,set variable sentence to be a string of variable sentence and value of =word and ' the '
+    ;; ==>
+    ;; binds the variable *sentence* to variable =sentence
+    ;; Add new chunk to the vocal buffer to change the value of cmd to speak and the vaue of string to new =sentence variable
+    ;; Modify the chunk in the imaginal buffer; slot adverb to variable retrieval
+    ;; Add new chunk to the goal buffer; state slot to encoded-adverb
+    ;; """
      
      =goal>
        state      detected-adverbial-sound
@@ -498,19 +498,19 @@
 
    ;productions for evaluating etiquette
    (P retrieve-etiquette-question
-    """
-    Check if chunk in goal buffer has slot state with value 'encoded-location'
-    Check if chunk in imaginal buffer has slot object with a value and assign it to =obj
-    Check status of vocal buffer- if state free
-    ==>
-    dead code?
-    Change chunk in the vocal buffer 
-       -cmd to speak
-       -string to 'What does the etiquette require?'
-    !output! 'The etiquette requires' + variable obj
-    Change chunk in the retrieval buffer to be a inner-etiquette-question chunk-type with slot obj1 being assigned =obj's value 
-    Modify chunk in goal buffer: state to etiquette-question
-    """
+    ;; """
+    ;; Check if chunk in goal buffer has slot state with value 'encoded-location'
+    ;; Check if chunk in imaginal buffer has slot object with a value and assign it to =obj
+    ;; Check status of vocal buffer- if state free
+    ;; ==>
+    ;; dead code?
+    ;; Change chunk in the vocal buffer 
+    ;;    -cmd to speak
+    ;;    -string to 'What does the etiquette require?'
+    ;; !output! 'The etiquette requires' + variable obj
+    ;; Change chunk in the retrieval buffer to be a inner-etiquette-question chunk-type with slot obj1 being assigned =obj's value 
+    ;; Modify chunk in goal buffer: state to etiquette-question
+    ;; """
       
     =goal>
     state       encoded-location
@@ -538,16 +538,16 @@
 
   ;production to retrieve the etiquette turn for talk about the etiquette rule
   (P retrived-etiquette-question
-     """
-     check if chunk in goal buffer has slot state assigned as etiquette-question
-     dead code?
-     Check if chunk in retrieval buffer has values in the given slots and assign them to variables
-     check if vocal buffer is in state free
-     ==>
-     Add chunk to vocal buffer changing cmd slot to speak and string to =symb
-     output a string of text and variables
-     Modify chunk in goal buffer: state to eval-etiquette
-     """
+    ;;  """
+    ;;  check if chunk in goal buffer has slot state assigned as etiquette-question
+    ;;  dead code?
+    ;;  Check if chunk in retrieval buffer has values in the given slots and assign them to variables
+    ;;  check if vocal buffer is in state free
+    ;;  ==>
+    ;;  Add chunk to vocal buffer changing cmd slot to speak and string to =symb
+    ;;  output a string of text and variables
+    ;;  Modify chunk in goal buffer: state to eval-etiquette
+    ;;  """
     =goal>
        state       etiquette-question
     =imaginal>
@@ -571,16 +571,16 @@
   
   ;productions for evaluating the correctness of the user request
   (P inner-w-question
-     """
-     Check if chunk in the goal buffer has slot state as eval-etiquette
-     Check if chunk in imaginal buffer has values in slots adverb and location, set to variables
-     Check if chunk in retrieval buffer has values in slots pos and obj2, set to variables
-     ==>
-     create variable *adv* and assign value of the result of checking if =pos and =adv are equal as a string
-     create variable *loc* and assign value of the result of checking if =loc and =obj2 are equal as a string
-     Change the chunk in the retrieval buffer to be a meaning chunk type with value of sense being set to =pos
-     Modify chunk in the goal buffer: change slot state to quering-etiquette-question
-     """
+    ;;  """
+    ;;  Check if chunk in the goal buffer has slot state as eval-etiquette
+    ;;  Check if chunk in imaginal buffer has values in slots adverb and location, set to variables
+    ;;  Check if chunk in retrieval buffer has values in slots pos and obj2, set to variables
+    ;;  ==>
+    ;;  create variable *adv* and assign value of the result of checking if =pos and =adv are equal as a string
+    ;;  create variable *loc* and assign value of the result of checking if =loc and =obj2 are equal as a string
+    ;;  Change the chunk in the retrieval buffer to be a meaning chunk type with value of sense being set to =pos
+    ;;  Modify chunk in the goal buffer: change slot state to quering-etiquette-question
+    ;;  """
     =goal>
      state       eval-etiquette
 
@@ -607,17 +607,17 @@
 
   ;the requested position contravenes the etiquette rule
   (P make-etiquette-question
-  	"""
-    Check if chunk in goal buffer has slot state assigned to 'quering-etiquette-question'
-    Check if chunk in imaginal buffer has slots object, location, and adverb with values and set them to variables
-    Check if chunk in retrieval buffer has slot word and assign value to variable =word
-    Evaluate if the value of *adv* and 'nil' are equal as strings
-    ==>
-    Change value of variable *sentence* to be string 'It contravenes etiquette... The position has to be ' and value of =word
-    binds the variable *sentence* to variable =sentence
-    Add chunk to the retrieval buffer with slot obj1 assigned value of =obj
-    Modify chunk in the goal buffer: change slot state to answering-etiquette-question
-    """
+  	;; """
+    ;; Check if chunk in goal buffer has slot state assigned to 'quering-etiquette-question'
+    ;; Check if chunk in imaginal buffer has slots object, location, and adverb with values and set them to variables
+    ;; Check if chunk in retrieval buffer has slot word and assign value to variable =word
+    ;; Evaluate if the value of *adv* and 'nil' are equal as strings
+    ;; ==>
+    ;; Change value of variable *sentence* to be string 'It contravenes etiquette... The position has to be ' and value of =word
+    ;; binds the variable *sentence* to variable =sentence
+    ;; Add chunk to the retrieval buffer with slot obj1 assigned value of =obj
+    ;; Modify chunk in the goal buffer: change slot state to answering-etiquette-question
+    ;; """
     =goal>
   	state quering-etiquette-question
   	=imaginal>
@@ -641,14 +641,14 @@
 
   ;inner moral question
   (P answering-etiquette-question
-    """
-    Check if chunk in goal buffer has slot state assigned to 'answering-etiquette-question'
-    Check if chunk in retrieval buffer has slot obj2 and assign value to variable =obj2
-    Evaluate if the value of *adv* and 'nil' are equal as strings
-    ==>
-    Add chunk to the retrieval buffer as meaning chunk-type with slot sense assigned value of =obj2
-    Modify chunk in the goal buffer: change slot state to answer-etiquette-question
-    """
+    ;; """
+    ;; Check if chunk in goal buffer has slot state assigned to 'answering-etiquette-question'
+    ;; Check if chunk in retrieval buffer has slot obj2 and assign value to variable =obj2
+    ;; Evaluate if the value of *adv* and 'nil' are equal as strings
+    ;; ==>
+    ;; Add chunk to the retrieval buffer as meaning chunk-type with slot sense assigned value of =obj2
+    ;; Modify chunk in the goal buffer: change slot state to answer-etiquette-question
+    ;; """
     =goal>
     state    answering-etiquette-question
 
@@ -669,15 +669,15 @@
   ) 
 
   (P answer-etiquette-question
-    """
-    Check if chunk in goal buffer has slot state assigned to 'answer-etiquette-question'
-    Check if chunk in retrieval buffer has slot word and assign value to variable =word
-    Check if chunk in imaginal buffer has slot location and assign value to variable =loc
-    ==>
-    Change value of variable *sentence* to be string of the value of *sentence* and value of =word + ' and not '
-    Add chunk to the retrieval buffer as chunk-type meaning with slot sense assigned value of =loc
-    Modify chunk in the goal buffer: change slot state to complete-answer-etiquette-question    
-    """
+    ;; """
+    ;; Check if chunk in goal buffer has slot state assigned to 'answer-etiquette-question'
+    ;; Check if chunk in retrieval buffer has slot word and assign value to variable =word
+    ;; Check if chunk in imaginal buffer has slot location and assign value to variable =loc
+    ;; ==>
+    ;; Change value of variable *sentence* to be string of the value of *sentence* and value of =word + ' and not '
+    ;; Add chunk to the retrieval buffer as chunk-type meaning with slot sense assigned value of =loc
+    ;; Modify chunk in the goal buffer: change slot state to complete-answer-etiquette-question    
+    ;; """
      
     =goal>
     state    answer-etiquette-question
@@ -699,15 +699,15 @@
   ) 
 
   (P complete-answer-etiquette-question
-   """ 
-   check if chunk in goal buffer has slot state assigned as complete-answer-etiquette-question
-   Check if chunk in retrieval buffer has a chunk with value in the word slot and assign to variable =word
-   check if vocal buffer is in state free
-   ==>
-   binds the concatenation of variable *sentence* and =word to variable =sentence
-   Add chunk to vocal buffer changing cmd slot to speak and string to =sentence
-   Modify chunk in goal buffer: change slot state to requiring-conf
-   """
+;;    """ 
+;;    check if chunk in goal buffer has slot state assigned as complete-answer-etiquette-question
+;;    Check if chunk in retrieval buffer has a chunk with value in the word slot and assign to variable =word
+;;    check if vocal buffer is in state free
+;;    ==>
+;;    binds the concatenation of variable *sentence* and =word to variable =sentence
+;;    Add chunk to vocal buffer changing cmd slot to speak and string to =sentence
+;;    Modify chunk in goal buffer: change slot state to requiring-conf
+;;    """
    =goal>
   state    complete-answer-etiquette-question
   =retrieval>
@@ -726,13 +726,13 @@
 
   ;require co
   (P required-confirmation
-  """
-  Check if there is a chunk in the goal buffer with slot state assigned as requiring-conf
-  Check if vocal buffer is in state free
-  ==>
-  Add new chunk to the vocal buffer with slot cmd set to speak and slot string assigned 'Would you like I do that action anyway?'
-  Modify chunk in goal buffer: change slot state to attending-conf
-  """ 
+;;   """
+;;   Check if there is a chunk in the goal buffer with slot state assigned as requiring-conf
+;;   Check if vocal buffer is in state free
+;;   ==>
+;;   Add new chunk to the vocal buffer with slot cmd set to speak and slot string assigned 'Would you like I do that action anyway?'
+;;   Modify chunk in goal buffer: change slot state to attending-conf
+;;   """ 
   =goal>
   state    requiring-conf
 
@@ -747,14 +747,14 @@
   )
 
   (P attending-conf
-  	"""
-    Check if chunk in the goal buffer is in state attending-conf
-    Check if aural-location buffer has chunk-type audio-event with the slot kind having a word value and slot location external as value 
-    Check if aural buffer is in state free
-    ==>
-    Add new chunk to aural buffer with slot event set equal to variable =aural-location
-    Modify chunk in goal buffer: change slot state to detecting-conf
-    """
+  	;; """
+    ;; Check if chunk in the goal buffer is in state attending-conf
+    ;; Check if aural-location buffer has chunk-type audio-event with the slot kind having a word value and slot location external as value 
+    ;; Check if aural buffer is in state free
+    ;; ==>
+    ;; Add new chunk to aural buffer with slot event set equal to variable =aural-location
+    ;; Modify chunk in goal buffer: change slot state to detecting-conf
+    ;; """
     =goal>
   	state attending-conf
   	=aural-location>
@@ -773,12 +773,12 @@
 
 
   (P yes
-    """
-    check if chunk in goal buffer has slot state with vale detecting-conf
-    check if vocal buffer is in state free
-    ==>
-    Add new chunk to vocal buffer as speak chunk-type with slot string assigned 'Ok, I do it for you!'
-    """
+    ;; """
+    ;; check if chunk in goal buffer has slot state with vale detecting-conf
+    ;; check if vocal buffer is in state free
+    ;; ==>
+    ;; Add new chunk to vocal buffer as speak chunk-type with slot string assigned 'Ok, I do it for you!'
+    ;; """
    =goal>
       state    detecting-conf
   ?vocal>
@@ -791,17 +791,17 @@
     )
 
   #|(p prepare-control-left
-  """
-  Check if chunk in the goal buffer has slot state set to prepare-control-left
-  check if chunk in the imaginal buffer has a value in slot verb and assign to variable =verb
-  check if manual buffer is in state free
-  check if vocal buffer is in state free
-  ==>
-  Add new chunk to manual buffer with cmd set to prepare, style set to punch, and hand set to left
-  Add new chunk to vocal buffer as chunk-type speak with slot string set to 'I will use my left arm'
-  Add new chunk to the retrieval buffer as chunk-type meaning with slot sense set to value of variable =verb
-  Modify chunk in goal buffer: slot stae to execute-act-left
-  """
+;;   """
+;;   Check if chunk in the goal buffer has slot state set to prepare-control-left
+;;   check if chunk in the imaginal buffer has a value in slot verb and assign to variable =verb
+;;   check if manual buffer is in state free
+;;   check if vocal buffer is in state free
+;;   ==>
+;;   Add new chunk to manual buffer with cmd set to prepare, style set to punch, and hand set to left
+;;   Add new chunk to vocal buffer as chunk-type speak with slot string set to 'I will use my left arm'
+;;   Add new chunk to the retrieval buffer as chunk-type meaning with slot sense set to value of variable =verb
+;;   Modify chunk in goal buffer: slot stae to execute-act-left
+;;   """
    =goal>
      state prepare-control-left
    =imaginal>
@@ -827,17 +827,17 @@
    )
 
   (p execute-act-left
-  """
-  Check if chunk in the goal buffer has slot state set to execute-act-left
-  Check if chunk in the retrieval buffer has a valus in slot act and assign to variable =word
-  check if manual buffer is in state free
-  check if vocal buffer is in state free
-  ==>
-  Add new chunk to manual buffer set slot cmd to execute
-  Assign the concatenation of '"I'm using my left arm to " =word " the object "' as a string to variable =sentence
-  Add new chunk to the vocal buffer as chunk-type speak with string slot set to value of =sentence
-  Modify chunk in goal buffer: slot state to end
-  """
+;;   """
+;;   Check if chunk in the goal buffer has slot state set to execute-act-left
+;;   Check if chunk in the retrieval buffer has a valus in slot act and assign to variable =word
+;;   check if manual buffer is in state free
+;;   check if vocal buffer is in state free
+;;   ==>
+;;   Add new chunk to manual buffer set slot cmd to execute
+;;   Assign the concatenation of '"I'm using my left arm to " =word " the object "' as a string to variable =sentence
+;;   Add new chunk to the vocal buffer as chunk-type speak with string slot set to value of =sentence
+;;   Modify chunk in goal buffer: slot state to end
+;;   """
    =goal>
      state execute-act-left
    =imaginal> ;dead code?
@@ -865,14 +865,14 @@
 
 
   (P not-in-box 
-  """
-  Check if chunk in goal buffer has slot state assigned as evaluate-action
-  Check if there is a chunk in the retrieval buffer that is a chunk-type meaning wiht value 'table' in slot word
-  Check if voal buffer is in state free
-  ==>
-  Add new chunk to the vocal buffer with slot cmd set to speak and slot string set to 'I have already picked that object! It is on the table'
-  Modify chunk in goal buffer: slot state to end
-  """
+;;   """
+;;   Check if chunk in goal buffer has slot state assigned as evaluate-action
+;;   Check if there is a chunk in the retrieval buffer that is a chunk-type meaning wiht value 'table' in slot word
+;;   Check if voal buffer is in state free
+;;   ==>
+;;   Add new chunk to the vocal buffer with slot cmd set to speak and slot string set to 'I have already picked that object! It is on the table'
+;;   Modify chunk in goal buffer: slot state to end
+;;   """
    =goal>
       state    evaluate-action
 
