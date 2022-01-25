@@ -562,7 +562,7 @@
     +vocal>
     cmd speak
     string     =symb
-    !output! (The etiquette requires that =obj1 has to stay =pos of =obj2)
+    !output! (The etiquette requires that =obj1 stays =pos =obj2)
     =retrieval> ;dead code?
     =imaginal> ;dead code?
     =goal>
