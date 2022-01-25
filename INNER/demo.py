@@ -97,7 +97,11 @@ def demo_table():
             onset = onset + 1.5  #0.4 thread 1
     actr.run(30)
 
-    print(actr.chunk_slot_value(actr.buffer_read('goal'), "state"))     # with this line we can get info from a buffer
+    print(actr.chunk_slot_value(actr.buffer_read('goal'), "state"))     # with this line we can get info from a buffer.
+
+    '''
+    previous line prints "ATTENDING-CONF", which means, the next step would be to send an aural event back to lisp (line 749)
+    '''
 
     actr.new_word_sound("yes", 15)
     # actr.remove_command_monitor("output-speech", "inner-speech-response")
