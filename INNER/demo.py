@@ -66,17 +66,12 @@ def demo_table():
     '''
     
     actr.new_word_sound("yes")
+    
+    print(actr.chunk_slot_value(actr.buffer_read('aural'), "content"))
+    
     actr.run(10)
 
     # actr.remove_command_monitor("output-speech", "inner-speech-response")
     # actr.remove_command("inner-speech-response")
 
-
-def AL_tts():
-    IP = "192.168.0.2"
-    tts = ALProxy("ALTextToSpeech", IP, 9559)
-    tts.say("Hello my name is Pepper")
-
-
-#AL_tts()
 demo_table()

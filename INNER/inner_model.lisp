@@ -111,7 +111,7 @@
     ;; modifies the chunk in the goal buffer, chaning the state slot to 'detected-object-sound'
     ;; """
     =goal>
-    state     encoded-command
+      state     encoded-command
 
     =aural-location>
        isa      audio-event
@@ -740,10 +740,11 @@
   state free
   ==>
   +vocal>
-  cmd speak
-  string "Would you like I do that action anyway?"
-  +goal>
-  state attending-conf
+    cmd speak
+    string "Would you like I do that action anyway?"
+  
+  =goal>
+    state attending-conf
   )
 
   (P attending-conf
@@ -756,7 +757,7 @@
     ;; Modify chunk in goal buffer: change slot state to detecting-conf
     ;; """
     =goal>
-  	  state attending-conf
+  	  state   attending-conf
   	=aural-location>
        isa      audio-event
        kind     word
@@ -767,8 +768,8 @@
    +aural>
       event =aural-location ; Third time this happens, maybe setting a value to slot from the buffer directly?
    =goal>
-   state detecting-conf
-
+      state detecting-conf
+    ;; !output! (I =word aaaaaaa)
    )
 
 
@@ -787,8 +788,8 @@
     +vocal>
     isa speak
     string "Ok, I do it for you!"
-    ;; =goal>
-    ;;   state end
+    =goal>
+      state end
     )
 
   #|(p prepare-control-left
