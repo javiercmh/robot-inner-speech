@@ -742,7 +742,7 @@
   +vocal>
   cmd speak
   string "Would you like I do that action anyway?"
-  =goal>
+  +goal>
   state attending-conf
   )
 
@@ -756,7 +756,7 @@
     ;; Modify chunk in goal buffer: change slot state to detecting-conf
     ;; """
     =goal>
-  	state attending-conf
+  	  state attending-conf
   	=aural-location>
        isa      audio-event
        kind     word
@@ -787,7 +787,8 @@
     +vocal>
     isa speak
     string "Ok, I do it for you!"
-    
+    ;; =goal>
+    ;;   state end
     )
 
   #|(p prepare-control-left

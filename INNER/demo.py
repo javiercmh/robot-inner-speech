@@ -1,7 +1,4 @@
 import actr
-import pyttsx3
-import speech_recognition as sr
-from tokenizer import tokenize, TOK
 
 #from naoqi import ALProxy
 
@@ -13,55 +10,21 @@ response_time = False
 
 
 def record_model_speech(model, string):
+    """This function is called when the model is supposed to speak. 
+    The string is the text to be spoken.
+    """
+
     global response, response_time
-    #response_time = actr.get_time(True)
+    response_time = actr.get_time(True)
     response = string
-    speech(response)
+    print(response)
 
 
 def record_model_motor(model, key):
     global response, response_time
     #response_time = actr.get_time(True)
     response = key
-    speech(response)
-
-
-def speech(response):
-    engine = pyttsx3.init()
-    engine.setProperty('rate', 125)
-    engine.say(response)
-    engine.runAndWait()
-    engine.stop()
-
-
-def speech_recognition():
-    # actr.reset()
-
-    # obtain audio from the microphone
-    r = sr.Recognizer()
-    with sr.Microphone() as source:
-        r.adjust_for_ambient_noise(source)
-        print("Say something!")
-        audio = r.listen(source)
-        text = r.recognize_google(audio, language="it-IT")
-        # text = word_tokenize(text)
-    # recognize speech using Google Speech Recognition
-    try:
-        # for testing purposes, we're just using the default API key
-        # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
-        # instead of `r.recognize_google(audio)`
-        print("Google Speech Recognition thinks you said " + str(text))
-    except sr.UnknownValueError:
-        print("Google Speech Recognition could not understand audio")
-    except sr.RequestError as e:
-        print(
-            "Could not request results from Google Speech Recognition service; {0}"
-            .format(e))
-    # actr.new_word_sound(text)
-    # for word in text:
-    #     actr.new_word_sound(word)
-    # actr.run(30)
-    return str(text)
+    print(response)
 
 
 def demo_table():
@@ -74,36 +37,37 @@ def demo_table():
     #init()
 
     # ...when manually setting the sentence (without synthesizer)
-    text = "put napkin near table"
+    text = "put napkin near table".split()
 
-    # ...when using Aldebran proxy for speech recognition
-    # text = AL_speech_recognition()
-
-    string = tokenize(text)
     onset = 0
     actr.set_parameter_value(":sound-decay-time", 0.4)  #0.3 thread 1
     # actr.set_parameter_value(":save-audicon-history", True)
     actr.add_command("inner-speech-response", record_model_speech,
                      "Inner speech model response")
     actr.monitor_command("output-speech", "inner-speech-response")
+
     actr.install_device(["speech", "microphone"])
     actr.add_command("motor-response", record_model_motor,
                      "Motor model response")
     # actr.monitor_command("pech", "motor-response")    # dead code? the command "pech" does not exist thus it cannot be monitored
-    for word in string:
-        if TOK.descr[word.kind] == "WORD":
-            print(str(word.txt))
-            actr.new_word_sound(str(word.txt), onset)
-            onset = onset + 1.5  #0.4 thread 1
-    actr.run(30)
+    for word in text:
+        print(word)
+        actr.new_word_sound(word, onset)
+        onset = onset + 1.5  # 0.4 thread 1
+
+    actr.run(30)    # run model for up to 30 seconds
 
     print(actr.chunk_slot_value(actr.buffer_read('goal'), "state"))     # with this line we can get info from a buffer.
+    print(actr.chunk_slot_value(actr.buffer_read('aural'), "state"))
+    
 
     '''
     previous line prints "ATTENDING-CONF", which means, the next step would be to send an aural event back to lisp (line 749)
     '''
+    
+    actr.new_word_sound("yes")
+    actr.run(10)
 
-    actr.new_word_sound("yes", 15)
     # actr.remove_command_monitor("output-speech", "inner-speech-response")
     # actr.remove_command("inner-speech-response")
 
