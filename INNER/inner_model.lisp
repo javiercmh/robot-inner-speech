@@ -341,7 +341,7 @@
     ;+vocal>
      ;isa speak
      ;string =sentence
-     !output! (I have to =act)
+    ;;  !output! (I have to =act)
       
 
     =goal>
@@ -389,7 +389,7 @@
       ;+vocal>
         ;cmd         speak
         ;string      =sentence
-     !output!    (I have to =action =word)
+    ;;  !output!    (I have to =action =word)
       
       =imaginal>
         object      =retrieval ; 2, No variable =retreival created on the RHS
@@ -440,7 +440,7 @@
       +vocal>
         cmd         speak
         string      =sentence ;first turn of inner dialogue
-        !output!    (I have to =action =obj =word)
+        ;; !output!    (I have to =action =obj =word)
       
       =imaginal>
         location      =retrieval
@@ -527,7 +527,7 @@
     +vocal>
     cmd speak
     string   "What does the etiquette require?"
-    !output! (What is the etiquette required for =obj)
+    ;; !output! (What is the etiquette required for =obj)
     +retrieval>
        ISA      inner-etiquette-question 
        obj1     =obj
@@ -562,7 +562,7 @@
     +vocal>
     cmd speak
     string     =symb
-    !output! (The etiquette requires that =obj1 stays =pos =obj2)
+    ;; !output! (The etiquette requires that =obj1 stays =pos =obj2)
     =retrieval> ;dead code?
     =imaginal> ;dead code?
     =goal>
