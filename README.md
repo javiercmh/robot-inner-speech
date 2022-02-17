@@ -27,7 +27,7 @@ To run ACT-R inner speech model, you need:
 
 Put the ACT-R folder in your preferred location.
 
-Download this repository and put it into `~/Documents/`.
+Clone this repository and put it into `~/Documents/`.
 
 From a terminal, go to the ACT-R directory and run the software:
 
@@ -37,63 +37,99 @@ If it fails, it might be that you need to give it executable permissions first:
 
     $ chmod +x run-act-r.command
  
-Back to the repository folder, run the Python code `demo.py`.
+Back to the repository folder, run the Python code `inner_speech.py`.
 
 Now you can see the model working in your ACT-R console.
 
-You can hear the inner speech dialogue by installing the [SpeechRecognition](https://pypi.org/project/SpeechRecognition/) Python library with:
-    
-        $ pip install SpeechRecognition
 
-After SpeechRecognition installation, when you run the model you should hear the inner dialogue produced by your machine.
+## Outputs
 
-## Running inner speech model on real robot
+### inner_speech.py
 
-### Prerequisites
+    ACT-R connection has been started.
+    #|Warning: Creating chunk START with no slots |#
+    #|Warning: Creating chunk DETECTED-WORD with no slots |#
+    #|Warning: Production WAIT-FOR-WORD makes a request to buffer AURAL without a query in the conditions. |#
+    #|Warning: Creating chunk START with no slots |#
+    #|Warning: Creating chunk DETECTED-WORD with no slots |#
+    #|Warning: Production WAIT-FOR-WORD makes a request to buffer AURAL without a query in the conditions. |#
+    Robin: Hi there! [waving hand]
+    Human: hello robin
+        0.000   GOAL                   SET-BUFFER-CHUNK GOAL GOAL NIL
+        0.000   AUDIO                  new-sound
+        0.000   PROCEDURAL             CONFLICT-RESOLUTION
+        0.300   AUDIO                  SET-BUFFER-CHUNK AURAL-LOCATION AUDIO-EVENT0 NIL
+        0.300   PROCEDURAL             CONFLICT-RESOLUTION
+        0.350   PROCEDURAL             PRODUCTION-FIRED WAIT-FOR-WORD
+        0.350   PROCEDURAL             CLEAR-BUFFER AURAL-LOCATION
+        0.350   PROCEDURAL             CLEAR-BUFFER AURAL
+        0.350   AUDIO                  ATTEND-SOUND AUDIO-EVENT0-0
+        0.350   PROCEDURAL             CONFLICT-RESOLUTION
+        0.475   AUDIO                  SET-BUFFER-CHUNK AURAL WORD0
+        0.475   PROCEDURAL             CONFLICT-RESOLUTION
+        0.500   AUDIO                  new-sound
+        0.525   PROCEDURAL             PRODUCTION-FIRED RETRIEVE-WORD
+        0.525   PROCEDURAL             CLEAR-BUFFER AURAL
+        0.525   PROCEDURAL             CLEAR-BUFFER RETRIEVAL
+        0.525   DECLARATIVE            start-retrieval
+        0.525   DECLARATIVE            RETRIEVED-CHUNK HELLO
+        0.525   DECLARATIVE            SET-BUFFER-CHUNK RETRIEVAL HELLO
+        0.525   PROCEDURAL             CONFLICT-RESOLUTION
+        0.575   PROCEDURAL             PRODUCTION-FIRED RESPOND-TO-HELLO
+        0.575   PROCEDURAL             CLEAR-BUFFER RETRIEVAL
+        0.575   PROCEDURAL             CLEAR-BUFFER VOCAL
+        0.575   SPEECH                 SPEAK TEXT How are you today?
+        0.575   PROCEDURAL             CONFLICT-RESOLUTION
+        0.725   PROCEDURAL             CONFLICT-RESOLUTION
+        0.775   AUDIO                  new-sound
+    Robin: How are you today?
+        0.775   PROCEDURAL             CONFLICT-RESOLUTION
+        0.800   AUDIO                  SET-BUFFER-CHUNK AURAL-LOCATION AUDIO-EVENT1 NIL
+        0.800   PROCEDURAL             CONFLICT-RESOLUTION
+        1.075   PROCEDURAL             CONFLICT-RESOLUTION
+        1.675   PROCEDURAL             CONFLICT-RESOLUTION
+        1.675   ------                 Stopped because no events left to process
+    #|Warning: Creating chunk START with no slots |#
+    #|Warning: Creating chunk DETECTED-WORD with no slots |#
+    #|Warning: Production WAIT-FOR-WORD makes a request to buffer AURAL without a query in the conditions. |#
+    Human: fine
+        0.000   GOAL                   SET-BUFFER-CHUNK GOAL GOAL NIL
+        0.000   AUDIO                  new-sound
+        0.000   PROCEDURAL             CONFLICT-RESOLUTION
+        0.300   AUDIO                  SET-BUFFER-CHUNK AURAL-LOCATION AUDIO-EVENT0 NIL
+        0.300   PROCEDURAL             CONFLICT-RESOLUTION
+        0.350   PROCEDURAL             PRODUCTION-FIRED WAIT-FOR-WORD
+        0.350   PROCEDURAL             CLEAR-BUFFER AURAL-LOCATION
+        0.350   PROCEDURAL             CLEAR-BUFFER AURAL
+        0.350   AUDIO                  ATTEND-SOUND AUDIO-EVENT0-0
+        0.350   PROCEDURAL             CONFLICT-RESOLUTION
+        0.450   AUDIO                  SET-BUFFER-CHUNK AURAL WORD0
+        0.450   PROCEDURAL             CONFLICT-RESOLUTION
+        0.500   PROCEDURAL             PRODUCTION-FIRED RETRIEVE-WORD
+        0.500   PROCEDURAL             CLEAR-BUFFER AURAL
+        0.500   PROCEDURAL             CLEAR-BUFFER RETRIEVAL
+        0.500   DECLARATIVE            start-retrieval
+        0.500   DECLARATIVE            RETRIEVED-CHUNK FINE
+        0.500   DECLARATIVE            SET-BUFFER-CHUNK RETRIEVAL FINE
+        0.500   PROCEDURAL             CONFLICT-RESOLUTION
+        0.550   PROCEDURAL             PRODUCTION-FIRED RESPOND-TO-FINE
+        0.550   PROCEDURAL             CLEAR-BUFFER RETRIEVAL
+        0.550   PROCEDURAL             CLEAR-BUFFER VOCAL
+        0.550   SPEECH                 SPEAK TEXT (Hm. This person does not appear interested. I do not want to be mean. I should ask them if something is wrong.) Is everything alright?
+        0.550   PROCEDURAL             CONFLICT-RESOLUTION
+        0.700   PROCEDURAL             CONFLICT-RESOLUTION
+        0.750   AUDIO                  new-sound
+    Robin (to himself): Hm. This person does not appear interested. I do not want to be mean. I should ask them if something is wrong.
+    Robin: Is everything alright?
+        0.750   PROCEDURAL             CONFLICT-RESOLUTION
+        1.050   AUDIO                  SET-BUFFER-CHUNK AURAL-LOCATION AUDIO-EVENT1 NIL
+        1.050   PROCEDURAL             CONFLICT-RESOLUTION
+        7.500   AUDIO                  MOD-BUFFER-CHUNK AURAL-LOCATION
+        7.500   PROCEDURAL             CONFLICT-RESOLUTION
+        7.500   ------                 Stopped because no events left to process
 
-Operative systems:
 
-- Ubuntu 16.04 LTS or newer, or Windows with [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-manual)
-
-- For integrating the framework on Pepper robot, just ROS kinetic version is required (that is the ROS version for MoveIt! library), which runs on Ubuntu 16.04 LTS.
-
-If you will use a different robot model, please verify the suitable ROS version, and the corresponding Ubuntu version.
-
-### 1 Prepare the environment
-
-- Install ACT-R architecture and the inner speech model
-
-Please, follow the instructions of the previous case (running inner speech model (without robot))
-
-
-- Install MoveIt! (which requires ROS)
-
-This is a [complete guide](http://docs.ros.org/kinetic/api/moveit_tutorials/html/doc/getting_started/getting_started.html) which allows you to install the complete framework for running ROS and enabling robot movements during interaction. Pay attention to the ROS version.
-
--  Install the configuration file of your robot
-
-You can find or built your own robot model by following the instuctions of the previous step in the section "[Robot model and Robot state](http://docs.ros.org/en/kinetic/api/moveit_tutorials/html/doc/robot_model_and_robot_state/robot_model_and_robot_state_tutorial.html)".
-
-For Pepper, you can use the pepper_moveit_config package available at
-
-<https://github.com/ros-naoqi/pepper_moveit_config>
-
-Follow all the instructions to play with Pepper and try movements.
-
-2 Compile the framework middleware
-----------------------------------
-The src package doesn't need any compilation so running rospack profile should be enough.
-
-Please, refer to the file demo_isc.py into the src folder to see how implementing new robot movements and behaviours according to the inner turns.
-
-Launch the middleware like this:
-
-    rosrun robot-inner-speech demo_isc.py
-    
-and see your Pepper robot interacts to you while producing inner speech. 
-
-
-## Output
+### demo.py
 
     ACT-R connection has been started.
     #|Warning: Creating chunk DETECTED-ADVERBIAL-SOUND with no slots |#

@@ -1,11 +1,6 @@
-from multiprocessing.spawn import prepare
 import actr
 
 actr.load_act_r_model("~/Documents/robot-inner-speech/INNER/robin_inner_model.lisp")
-
-global response, response_time
-response = ''
-response_time = False
 
 
 def reset_actr():
