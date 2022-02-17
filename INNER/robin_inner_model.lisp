@@ -22,6 +22,8 @@
   (chunk-type goal-state state)
   ;the type for understanding words
   (chunk-type meaning word sense pos act)
+  ;chunck type for the user command
+  (chunk-type keyword word type)
   
   ;chunks for inner questions
   (chunk-type inner-where obj place)
@@ -51,6 +53,8 @@
    (right-adv ISA meaning word "right" sense right pos adv)
    (plate ISA meaning word "plate" sense plate pos noun)
    (table ISA meaning word "table" sense table pos noun)
+
+   (hello ISA keyword word "hello" type greeting)
   
 ;;   """ Create empty chunks"""
    (start ISA chunk)(detected-command-sound isa chunk)
@@ -61,6 +65,52 @@
    (verb ISA chunk)(noun ISA chunk)(adv ISA chunk)
 
      )
+
+  ; detect greeting
+  (P detect-greeting
+    =goal>
+      state       start
+    =aural-location>
+        isa       audio-event
+        kind      word
+        location  external ;it is from an external source
+    ==>
+    +aural>
+      event       =aural-location
+    =goal>
+      state       detected-greeting
+  )
+
+  ; retrieve meaning of the greeting
+  (P retrieve-meaning-greeting
+    =goal>
+      state       detected-greeting
+    =aural>
+      ISA         sound
+      content     =word
+    ==>
+    +retrieval>
+      ISA         keyword
+      word        =word
+  )
+
+  ; respond to greeting
+  (P respond-to-greeting
+    =goal>
+      state       detected-greeting
+    =retrieval>
+      word        =word
+      type        greeting
+    ?vocal>   
+      state       free 
+    ==>
+    +vocal>
+      cmd         speak
+      string      "How are you today?"
+    +goal>
+      state       wait-next-command
+  )  
+
 
   ; detect verb of the sentence (1st position, 'put' in the example)
   (P detected-command-sound
@@ -79,7 +129,8 @@
     ;; """
     
     =goal>
-    state    start
+    ;; state    start
+    state    startsss ;; breaking it on purpose
 
     =aural-location>
        isa      audio-event
@@ -94,9 +145,9 @@
 
     +aural>
       event =aural-location
-    +vocal>
-      cmd speak
-      string "Hi human, I am ready to listen"
+    ;; +vocal>
+    ;;   cmd speak
+    ;;   string "Hi human, I am ready to listen"
     =goal>
       state  detected-command-sound
    
