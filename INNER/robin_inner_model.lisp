@@ -94,10 +94,11 @@
 
     +aural>
       event =aural-location
-
+    +vocal>
+      cmd speak
+      string "Hi human, I am ready to listen"
     =goal>
-     state     detected-command-sound
-
+      state  detected-command-sound
    
     )
   
@@ -120,7 +121,7 @@
        location external
     ?aural>
        state   free
-
+    
     ==>
     
     +aural>
@@ -339,11 +340,11 @@
         kind     word
         location external
     !eval! (setq *sentence* (concatenate 'string "I have to " =act))
-    
-    ;; +vocal>
-    ;; cmd speak
-    ;; string =word
+    ;+vocal>
+     ;isa speak
+     ;string =sentence
     ;;  !output! (I have to =act)
+      
 
     =goal>
      state          encoded-command
@@ -438,10 +439,6 @@
      !eval! (setq *sentence* (concatenate 'string *sentence* =word))
      ==>
       !bind! =sentence *sentence*
-      
-      +goal>
-        state    encoded-location
-      
       +vocal>
         cmd         speak
         string      =sentence ;first turn of inner dialogue
@@ -451,7 +448,8 @@
         location      =retrieval
         !output! (Imaginal has =retrieval)
       
-      
+      +goal>
+        state    encoded-location
       
     )
 
