@@ -62,8 +62,7 @@
 
      )
 
-  ;the productions for hearing command, object, adverbial and location sounds. Their source is always external
-  ;for command
+  ; detect verb of the sentence (1st position, 'put' in the example)
   (P detected-command-sound
     ;; """
     ;; check that the goal buffer is in the start state (The start of the program?)
@@ -100,7 +99,7 @@
    
     )
   
-  ;for object
+  ; detect object of the sentence (2nd position, 'napkin' in the example)
   (P detected-object-sound
     ;; """
     ;; check if goal buffer is in state 'encoded-command'
@@ -444,6 +443,7 @@
       
       =imaginal>
         location      =retrieval
+        !output! (Imaginal has =retrieval)
       
       +goal>
         state    encoded-location

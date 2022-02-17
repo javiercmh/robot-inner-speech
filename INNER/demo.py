@@ -60,6 +60,9 @@ def demo_table():
     print(actr.chunk_slot_value(actr.buffer_read('goal'), "state"))     # with this line we can get info from a buffer.
     print(actr.chunk_slot_value(actr.buffer_read('aural'), "state"))
     
+    print('---------i-m-a-g-i-n-a-l-----')
+    print(actr.chunk_slot_value(actr.buffer_read('imaginal'), "verb"))
+    print('-----------------------------')
 
     '''
     previous line prints "ATTENDING-CONF", which means, the next step would be to send an aural event back to lisp (line 749)
