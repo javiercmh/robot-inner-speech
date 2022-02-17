@@ -41,6 +41,7 @@
      
    ;the vocabulary
    (hello ISA keyword word "hello")
+   (fine ISA keyword word "fine")
   
 ;;   """ Create empty chunks"""
   ;;  (start ISA chunk)(detected-command-sound isa chunk)
@@ -80,7 +81,7 @@
       word        =word
   )
 
-  (P respond-to-greeting
+  (P respond-to-hello
     =goal>
       state       detected-word
     =retrieval>
@@ -91,7 +92,20 @@
     +vocal>
       cmd         speak
       string      "How are you today?"
-  )  
+  )
+
+  (P respond-to-fine
+    =goal>
+      state       detected-word
+    =retrieval>
+      word        "fine"
+    ?vocal>   
+      state       free 
+    ==>
+    +vocal>
+      cmd         speak
+      string      "(Hm. This person does not appear interested. I do not want to be mean. I should ask them if something is wrong.) Is everything alright?"
+  )
 
 
   ; detect verb of the sentence (1st position, 'put' in the example)
