@@ -38,36 +38,23 @@
    (p3 ISA inner-etiquette-question pos on obj1 napkin obj2 plate symb "The napkin has to stay on the plate")
    (p4 ISA inner-where obj napkin place basket)
    (p5 ISA comprehend-voo verb put object napkin adverb on location plate)
-  
-   
+     
    ;the vocabulary
-   (give ISA meaning word "give" sense give pos verb act "pick")
-   (put ISA meaning word "put" sense put pos verb act "place")
-   (pick ISA meaning word "pick" sense pick pos verb act "pick")
-   (napkin ISA meaning word "napkin" sense napkin pos noun act nil)
-   (basket ISA meaning word "basket" sense basket pos noun act nil)
-   (in ISA meaning word "in" sense in pos adv)
-   (on ISA meaning word "on" sense on pos adv)
-   (near ISA meaning word "near" sense near pos adv)
-   (left-adv ISA meaning word "left" sense left pos adv)
-   (right-adv ISA meaning word "right" sense right pos adv)
-   (plate ISA meaning word "plate" sense plate pos noun)
-   (table ISA meaning word "table" sense table pos noun)
-
-   (hello ISA keyword word "hello" type greeting)
+   (hello ISA keyword word "hello")
   
 ;;   """ Create empty chunks"""
-   (start ISA chunk)(detected-command-sound isa chunk)
-   (detected-object-sound isa chunk) (encoded-command isa chunk)
-   (start-inner isa chunk) (retrieving-meaning isa chunk)
-   (encoded-obj isa chunk) (etiquette-question isa chunk) (encoded-location isa chunk)
+  ;;  (start ISA chunk)(detected-command-sound isa chunk)
+  ;;  (detected-object-sound isa chunk) (encoded-command isa chunk)
+  ;;  (start-inner isa chunk) (retrieving-meaning isa chunk)
+  ;;  (encoded-obj isa chunk) (etiquette-question isa chunk) (encoded-location isa chunk)
 
    (verb ISA chunk)(noun ISA chunk)(adv ISA chunk)
 
      )
 
-  ; detect greeting
-  (P detect-greeting
+;; Productions
+
+  (P wait-for-word
     =goal>
       state       start
     =aural-location>
@@ -78,13 +65,12 @@
     +aural>
       event       =aural-location
     =goal>
-      state       detected-greeting
+      state       detected-word
   )
 
-  ; retrieve meaning of the greeting
-  (P retrieve-meaning-greeting
+  (P retrieve-word
     =goal>
-      state       detected-greeting
+      state       detected-word
     =aural>
       ISA         sound
       content     =word
@@ -94,21 +80,17 @@
       word        =word
   )
 
-  ; respond to greeting
   (P respond-to-greeting
     =goal>
-      state       detected-greeting
+      state       detected-word
     =retrieval>
-      word        =word
-      type        greeting
+      word        "hello"
     ?vocal>   
       state       free 
     ==>
     +vocal>
       cmd         speak
       string      "How are you today?"
-    +goal>
-      state       wait-next-command
   )  
 
 
