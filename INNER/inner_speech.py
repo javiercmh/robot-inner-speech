@@ -4,6 +4,8 @@ import re
 actr.load_act_r_model("~/Documents/robot-inner-speech/INNER/robin_inner_model.lisp")
 
 TIME = 0
+INTERACTIONS = []
+
 
 def reset_actr():
     TIME = actr.get_time(True)/1000
@@ -21,6 +23,15 @@ def reset_actr():
     actr.install_device(["speech", "microphone"])
 
 
+def record_interactions(text):
+    """Record the interactions between the human and the robot.
+    """
+    global INTERACTIONS
+
+    INTERACTIONS.append(text)
+    print(text)
+    
+
 def robin_speaks(model=None, string=''):
     """Gets what Robin is supposed to say.
     """
@@ -30,10 +41,10 @@ def robin_speaks(model=None, string=''):
         inner, regular = string.split(') ')
         inner = inner.replace('(', '')
 
-        print("Robin (to themself):", inner)
-        print("Robin:", regular)
+        record_interactions(f"Robin (to themself): {inner}")
+        record_interactions(f"Robin: {regular}")
     else:
-        print("Robin:", string)
+        record_interactions(f"Robin: {string}")
 
 
 def human_speaks(string):
@@ -41,13 +52,14 @@ def human_speaks(string):
     """
     global TIME
 
+    record_interactions(f"Human: {string}")
+
     # keep only the word-like characters
     string = re.sub(r'[^\w\s]', '', string)
 
     for word in string.split():
         actr.new_word_sound(word, TIME)
         TIME = TIME + 1  # separate words by 1 second (in model-time)
-    print("Human:", string)
 
 
 def inner_speech():
@@ -56,6 +68,7 @@ def inner_speech():
     It starts with the robot saying "hi"
     """
     global TIME
+    global INTERACTIONS
 
     actr.reset()
     actr.set_parameter_value(":sound-decay-time", 0.3)
@@ -70,7 +83,7 @@ def inner_speech():
     
     # we get our response (but in this case we hardcode it)
     # response = get_human_input()
-    text = "oh hello robin"
+    text = "Hello, Robin"
     human_speaks(text)
 
     print(actr.chunk_slot_value(actr.buffer_read('aural'), "content"))
@@ -117,6 +130,8 @@ def inner_speech():
     text = "Nope, I am good"
     human_speaks(text)
     actr.run(TIME+10)
+
+    print('\n'.join(INTERACTIONS))
     
 
 if __name__ == "__main__":
