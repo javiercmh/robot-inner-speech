@@ -38,7 +38,7 @@ def human_speaks(string):
     onset = actr.get_time(True)/1000
     for word in string.split():
         actr.new_word_sound(word, onset)
-        onset = onset + 0.5  # separate words by 0.5 seconds (in model-time)
+        onset = onset + 1  # separate words by 1 second (in model-time)
     print("Human:", string)
 
 
@@ -49,7 +49,7 @@ def inner_speech():
     """
 
     actr.reset()
-    actr.set_parameter_value(":sound-decay-time", 0.4)  #0.3 thread 1
+    actr.set_parameter_value(":sound-decay-time", 0.3)
 
     actr.add_command("inner-speech-response", robin_speaks,
                      "Inner speech model response")
@@ -61,27 +61,33 @@ def inner_speech():
     
     # we get our response (but in this case we hardcode it)
     # response = get_human_input()
-    text = "hello robin"
+    text = "oh hello robin"
+    human_speaks(text)
+    # actr.new_word_sound(text, actr.get_time(True)/1000)
+
+    print(actr.chunk_slot_value(actr.buffer_read('aural'), "content"))
+    actr.run(20)    # run model for 20 seconds
+    # actr.run_until_time(20)
+
+    print(actr.chunk_slot_value(actr.buffer_read('goal'), "state"))
+
+
+    # reset_actr()
+
+    text = "fine thanks"
     human_speaks(text)
 
     actr.run(20)    # run model for 20 seconds
-
-    reset_actr()
-
-    text = "fine"
-    human_speaks(text)
-
-    actr.run(20)    # run model for 20 seconds
-    return  # break here for now
+    
 
     # actr.set_chunk_slot_value(actr.buffer_read('goal'), "state", "done")
-    print(actr.chunk_slot_value(actr.buffer_read('goal'), "state"))
+    # print(actr.chunk_slot_value(actr.buffer_read('goal'), "state"))
         
-    actr.new_word_sound("yes")
+    # actr.new_word_sound("yes")
     
-    print(actr.chunk_slot_value(actr.buffer_read('aural'), "content"))
+    # print(actr.chunk_slot_value(actr.buffer_read('aural'), "content"))
     
-    actr.run(10)
+    # actr.run(10)
     
 
 if __name__ == "__main__":
