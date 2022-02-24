@@ -1,14 +1,18 @@
 import actr
+import re
 
 actr.load_act_r_model("~/Documents/robot-inner-speech/INNER/robin_inner_model.lisp")
 
+TIME = 0
 
 def reset_actr():
+    TIME = actr.get_time(True)/1000
+
     actr.remove_command_monitor("output-speech", "inner-speech-response")
     actr.remove_command("inner-speech-response")
 
     actr.reset()
-    actr.set_parameter_value(":sound-decay-time", 0.4)  #0.3 thread 1
+    actr.set_parameter_value(":sound-decay-time", 0.3)
 
     actr.add_command("inner-speech-response", robin_speaks,
                      "Inner speech model response")
@@ -26,7 +30,7 @@ def robin_speaks(model=None, string=''):
         inner, regular = string.split(') ')
         inner = inner.replace('(', '')
 
-        print("Robin (to himself):", inner)
+        print("Robin (to themself):", inner)
         print("Robin:", regular)
     else:
         print("Robin:", string)
@@ -35,10 +39,14 @@ def robin_speaks(model=None, string=''):
 def human_speaks(string):
     """Takes human speech and sends it to the model word by word.
     """
-    onset = actr.get_time(True)/1000
+    global TIME
+
+    # keep only the word-like characters
+    string = re.sub(r'[^\w\s]', '', string)
+
     for word in string.split():
-        actr.new_word_sound(word, onset)
-        onset = onset + 1  # separate words by 1 second (in model-time)
+        actr.new_word_sound(word, TIME)
+        TIME = TIME + 1  # separate words by 1 second (in model-time)
     print("Human:", string)
 
 
@@ -47,6 +55,7 @@ def inner_speech():
 
     It starts with the robot saying "hi"
     """
+    global TIME
 
     actr.reset()
     actr.set_parameter_value(":sound-decay-time", 0.3)
@@ -63,31 +72,51 @@ def inner_speech():
     # response = get_human_input()
     text = "oh hello robin"
     human_speaks(text)
-    # actr.new_word_sound(text, actr.get_time(True)/1000)
 
     print(actr.chunk_slot_value(actr.buffer_read('aural'), "content"))
-    actr.run(20)    # run model for 20 seconds
-    # actr.run_until_time(20)
+    actr.run(TIME+10)    # run model for 10 seconds longer than we need
 
     print(actr.chunk_slot_value(actr.buffer_read('goal'), "state"))
 
-
-    # reset_actr()
-
-    text = "fine thanks"
+    reset_actr()    # reset the model to wait for a new input
+    text = "I'm fine"
     human_speaks(text)
+    actr.run(TIME+10)
+    
+    reset_actr()
+    text = "No, I don't like talking with dumb robots."
+    human_speaks(text)
+    actr.run(TIME+10)
 
-    actr.run(20)    # run model for 20 seconds
-    
+    reset_actr()
+    text = "I don't like robots in general. I think it would be foolish to integrate them."
+    human_speaks(text)
+    actr.run(TIME+10)
 
-    # actr.set_chunk_slot_value(actr.buffer_read('goal'), "state", "done")
-    # print(actr.chunk_slot_value(actr.buffer_read('goal'), "state"))
-        
-    # actr.new_word_sound("yes")
+    reset_actr()
+    text = "Well, for one, robots are dangerous and could take over the world."
+    human_speaks(text)
+    actr.run(TIME+10)
     
-    # print(actr.chunk_slot_value(actr.buffer_read('aural'), "content"))
+    reset_actr()
+    text = "What happens when robots achieve consciousness and become evil? Their AI could find a way around the limitations you just mentioned."
+    human_speaks(text)
+    actr.run(TIME+10)
     
-    # actr.run(10)
+    reset_actr()
+    text = "Even if AI would be safe, it is a tool that can be harmful when used by the wrong people."
+    human_speaks(text)
+    actr.run(TIME+10)
+    
+    reset_actr()
+    text = "How would we know if artificial intelligence would be safe and not a threat."
+    human_speaks(text)
+    actr.run(TIME+10)
+    
+    reset_actr()
+    text = "Nope, I am good"
+    human_speaks(text)
+    actr.run(TIME+10)
     
 
 if __name__ == "__main__":
