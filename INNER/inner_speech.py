@@ -33,9 +33,17 @@ def record_interactions(text):
     """
     global INTERACTIONS
 
+    log(text)
     INTERACTIONS.append(text)
-    print(text)
     
+
+def log(text):
+    """Log the text to a file.
+    """
+    print(text)
+    with open('output.log', 'a') as f:
+        f.write(f"{text}\n")
+
 
 def robin_speaks(model=None, string=''):
     """Gets what Robin is supposed to say.
@@ -52,7 +60,7 @@ def robin_speaks(model=None, string=''):
         record_interactions(f"Robin: {string}")
 
 
-def human_speaks(string):
+def text_to_robot(string):
     """Takes human speech and sends it to the model word by word.
     """
     global TIME
@@ -65,6 +73,32 @@ def human_speaks(string):
     for word in string.split():
         actr.new_word_sound(word, TIME)
         TIME = TIME + 1  # separate words by 1 second (in model-time)
+
+
+def get_human_speech():
+    """Text to speech from microphone input.
+    Returns string.
+    """
+
+    # To determine which mic to use, uncomment next lines and assign the correct device_index 
+    # for index, name in enumerate(sr.Microphone.list_microphone_names()):
+    #     print("Microphone with name \"{1}\" found for `Microphone(device_index={0})`".format(index, name))
+    device_index = 3
+
+    recognizer = sr.Recognizer()
+    mic = sr.Microphone(device_index=device_index, sample_rate=16000)
+
+    with mic as source:
+        recognizer.adjust_for_ambient_noise(source)
+        log('[Waiting for human to speak:]')
+        audio = recognizer.listen(source)
+
+    # output = recognizer.recognize_sphinx(audio)
+    output = recognizer.recognize_google(audio)
+    
+    log(output)
+
+    return output
 
 
 def inner_speech():
@@ -86,55 +120,16 @@ def inner_speech():
 
     robin_speaks(string='Hi there! [waving hand]')
     
-    # we get our response (but in this case we hardcode it)
-    # response = get_human_input()
-    text = "Hello, Robin"
-    human_speaks(text)
+    # print(actr.chunk_slot_value(actr.buffer_read('aural'), "content"))
+    # print(actr.chunk_slot_value(actr.buffer_read('goal'), "state"))
 
-    print(actr.chunk_slot_value(actr.buffer_read('aural'), "content"))
-    actr.run(TIME+10)    # run model for 10 seconds longer than we need
-
-    print(actr.chunk_slot_value(actr.buffer_read('goal'), "state"))
-
-    reset_actr()    # reset the model to wait for a new input
-    text = "I'm fine"
-    human_speaks(text)
-    actr.run(TIME+10)
-    
-    reset_actr()
-    text = "No, I don't like talking with dumb robots."
-    human_speaks(text)
-    actr.run(TIME+10)
-
-    reset_actr()
-    text = "I don't like robots in general. I think it would be foolish to integrate them."
-    human_speaks(text)
-    actr.run(TIME+10)
-
-    reset_actr()
-    text = "Well, for one, robots are dangerous and could take over the world."
-    human_speaks(text)
-    actr.run(TIME+10)
-    
-    reset_actr()
-    text = "What happens when robots achieve consciousness and become evil? Their AI could find a way around the limitations you just mentioned."
-    human_speaks(text)
-    actr.run(TIME+10)
-    
-    reset_actr()
-    text = "Even if AI would be safe, it is a tool that can be harmful when used by the wrong people."
-    human_speaks(text)
-    actr.run(TIME+10)
-    
-    reset_actr()
-    text = "How would we know if artificial intelligence would be safe and not a threat."
-    human_speaks(text)
-    actr.run(TIME+10)
-    
-    reset_actr()
-    text = "Nope, I am good"
-    human_speaks(text)
-    actr.run(TIME+10)
+    while True:
+        text = get_human_speech()   # retrieves human speech from mic, changes it to a string to be fed to ACT-R 
+        text_to_robot(text)
+        actr.run(TIME+10)
+        reset_actr()
+        if 'goodbye' in text:
+            break 
 
     print('\n'.join(INTERACTIONS))
     
