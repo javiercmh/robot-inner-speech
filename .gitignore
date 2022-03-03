@@ -1,5 +1,6 @@
 venv/
 .vscode/
+build/
 .directory
 __pycache__/
 *.pyc

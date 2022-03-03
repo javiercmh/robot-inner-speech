@@ -1,5 +1,10 @@
 import actr
 import re
+import speech_recognition as sr
+
+"""
+/home/javier/finroc/sources/cpp/libraries/speech_recognition/etc/speech_recog_script.py
+"""
 
 actr.load_act_r_model("~/Documents/robot-inner-speech/INNER/robin_inner_model.lisp")
 
