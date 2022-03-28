@@ -2,9 +2,9 @@ import logging
 import re
 import actr
 import speech_recognition as sr
+import libfinroc_plugins_interface_api_finroc_interface as finroc
 
 
-# log to a file using logging
 logging.basicConfig(
     # filename='output.log', 
     format='%(asctime)s %(message)s',
@@ -16,7 +16,7 @@ logging.basicConfig(
 
 
 class Mind():
-    def __init__(self, finroc=None, mic_index=0, sample_rate=16000, engine='sphinx'):
+    def __init__(self, mic_index=0, sample_rate=16000, engine='sphinx'):
         """Initializes the object with the model, finroc, and mic settings.
         Parameters:
             actr: ACT-R model
@@ -34,6 +34,13 @@ class Mind():
         # load model
         actr.load_act_r_model("~/Documents/robot-inner-speech/INNER/robin_inner_model.lisp")
         logging.debug('[Inner speech model initialized]')
+
+        # initialize finroc
+        interface = finroc.CreateInterfaceModule("actr_interface", None)
+        finroc.Initialize("ACTR Inner Speech")
+        self.robot_inner_dialog = interface.CreateOutputPort("robot_inner_dialog")
+        self.robot_regular_dialog = interface.CreateOutputPort("robot_regular_dialog")
+
 
     def reset_actr(self):
         self.time = actr.get_time(True) / 1000
@@ -57,6 +64,10 @@ class Mind():
         if '(' in string:
             inner, regular = string.split(') ')
             inner = inner.replace('(', '')
+
+            # send speech to finroc
+            self.robot_inner_dialog.Publish(inner, 0)
+            self.robot_regular_dialog.Publish(regular, 0)
 
             logging.debug(f"Robin (to themself): {inner}")
             logging.debug(f"Robin: {regular}")
