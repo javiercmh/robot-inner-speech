@@ -1,138 +1,133 @@
-import actr
+import logging
 import re
+import actr
 import speech_recognition as sr
 
-"""
-/home/javier/finroc/sources/cpp/libraries/speech_recognition/etc/speech_recog_script.py
-"""
 
-actr.load_act_r_model("~/Documents/robot-inner-speech/INNER/robin_inner_model.lisp")
-
-TIME = 0
-INTERACTIONS = []
-
-
-def reset_actr():
-    TIME = actr.get_time(True)/1000
-
-    actr.remove_command_monitor("output-speech", "inner-speech-response")
-    actr.remove_command("inner-speech-response")
-
-    actr.reset()
-    actr.set_parameter_value(":sound-decay-time", 0.3)
-
-    actr.add_command("inner-speech-response", robin_speaks,
-                     "Inner speech model response")
-    actr.monitor_command("output-speech", "inner-speech-response")
-
-    actr.install_device(["speech", "microphone"])
+# log to a file using logging
+logging.basicConfig(
+    # filename='output.log', 
+    format='%(asctime)s %(message)s',
+    level=logging.DEBUG,
+    handlers=[
+        logging.FileHandler("debug.log"),
+        logging.StreamHandler()
+    ])
 
 
-def record_interactions(text):
-    """Record the interactions between the human and the robot.
-    """
-    global INTERACTIONS
+class Mind():
+    def __init__(self, finroc=None, mic_index=0, sample_rate=16000, engine='sphinx'):
+        """Initializes the object with the model, finroc, and mic settings.
+        Parameters:
+            actr: ACT-R model
+            finroc: Finroc object
+            mic_index: microphone device index
+            sample_rate: sample rate of microphone
+            engine: speech recognition engine (sphinx or google)
+        """
+        self.time = 0
+        self.finroc = finroc
+        self.mic_index = mic_index
+        self.sample_rate = sample_rate
+        self.engine = engine
 
-    log(text)
-    INTERACTIONS.append(text)
-    
+        # load model
+        actr.load_act_r_model("~/Documents/robot-inner-speech/INNER/robin_inner_model.lisp")
+        logging.debug('[Inner speech model initialized]')
 
-def log(text):
-    """Log the text to a file.
-    """
-    print(text)
-    with open('output.log', 'a') as f:
-        f.write(f"{text}\n")
+    def reset_actr(self):
+        self.time = actr.get_time(True) / 1000
 
+        actr.remove_command_monitor("output-speech", "inner-speech-response")
+        actr.remove_command("inner-speech-response")
 
-def robin_speaks(model=None, string=''):
-    """Gets what Robin is supposed to say.
-    """
-    
-    # separate inner- from regular speech
-    if '(' in string:
-        inner, regular = string.split(') ')
-        inner = inner.replace('(', '')
+        actr.reset()
+        actr.set_parameter_value(":sound-decay-time", 0.3)
 
-        record_interactions(f"Robin (to themself): {inner}")
-        record_interactions(f"Robin: {regular}")
-    else:
-        record_interactions(f"Robin: {string}")
+        actr.add_command("inner-speech-response", self.robin_speaks,
+                        "Inner speech model response")
+        actr.monitor_command("output-speech", "inner-speech-response")
 
+        actr.install_device(["speech", "microphone"])
 
-def text_to_robot(string):
-    """Takes human speech and sends it to the model word by word.
-    """
-    global TIME
+    def robin_speaks(self, string=''):
+        """Gets what Robin is supposed to say.
+        """
+        # separate inner- from regular speech
+        if '(' in string:
+            inner, regular = string.split(') ')
+            inner = inner.replace('(', '')
 
-    record_interactions(f"Human: {string}")
+            logging.debug(f"Robin (to themself): {inner}")
+            logging.debug(f"Robin: {regular}")
+        else:
+            logging.debug(f"Robin: {string}")
 
-    # keep only the word-like characters
-    string = re.sub(r'[^\w\s]', '', string)
+    def text_to_robot(self, string):
+        """Takes human speech and sends it to the self word.
+        """
+        logging.debug(f"Human: {string}")
 
-    for word in string.split():
-        actr.new_word_sound(word, TIME)
-        TIME = TIME + 1  # separate words by 1 second (in model-time)
+        # keep only the word-like characters
+        string = re.sub(r'[^\w\s]', '', string)
 
+        for word in string.split():
+            actr.new_word_sound(word, self.time)
+            self.time += 1  # separate words by 1 second (in model-time)
 
-def get_human_speech():
-    """Text to speech from microphone input.
-    Returns string.
-    """
+    def get_human_speech(self):
+        """Text to speech from microphone input.
+        Returns string.
+        """
+        recognizer = sr.Recognizer()
+        mic = sr.Microphone(device_index=self.mic_index, sample_rate=self.sample_rate)
 
-    # To determine which mic to use, uncomment next lines and assign the correct device_index 
-    # for index, name in enumerate(sr.Microphone.list_microphone_names()):
-    #     print("Microphone with name \"{1}\" found for `Microphone(device_index={0})`".format(index, name))
-    device_index = 3
+        with mic as source:
+            recognizer.adjust_for_ambient_noise(source)
+            logging.debug('[Waiting for human to speak:]')
+            audio = recognizer.listen(source)
 
-    recognizer = sr.Recognizer()
-    mic = sr.Microphone(device_index=device_index, sample_rate=16000)
+        # detect speech using engine
+        if self.engine == 'sphinx':
+            output = recognizer.recognize_sphinx(audio)
+        elif self.engine == 'google':
+            output = recognizer.recognize_google(audio)
 
-    with mic as source:
-        recognizer.adjust_for_ambient_noise(source)
-        log('[Waiting for human to speak:]')
-        audio = recognizer.listen(source)
+        logging.debug(output)
 
-    # output = recognizer.recognize_sphinx(audio)
-    output = recognizer.recognize_google(audio)
-    
-    log(output)
+        return output
 
-    return output
+    def inner_speech(self):
+        """Making Robin start conversation with human using the ACT-R model.
+        """
+        actr.reset()
+        actr.set_parameter_value(":sound-decay-time", 0.3)
 
+        actr.add_command("inner-speech-response", self.robin_speaks,
+                        "Inner speech model response")
+        actr.monitor_command("output-speech", "inner-speech-response")
 
-def inner_speech():
-    """ Run the ACT-R model.
+        actr.install_device(["speech", "microphone"])
 
-    It starts with the robot saying "hi"
-    """
-    global TIME
-    global INTERACTIONS
+        self.robin_speaks(string='Hi there! [waving hand]')
+        
+        while True:
+            try:
+                text = self.get_human_speech()   # retrieves human speech from mic, changes it to a string to be fed to ACT-R 
+            except sr.UnknownValueError:
+                logging.debug('I did not understand.')
+                continue
+            self.text_to_robot(text)
+            actr.run(self.time+10)
+            self.reset_actr()
+            if 'goodbye' in text:
+                break 
 
-    actr.reset()
-    actr.set_parameter_value(":sound-decay-time", 0.3)
-
-    actr.add_command("inner-speech-response", robin_speaks,
-                     "Inner speech model response")
-    actr.monitor_command("output-speech", "inner-speech-response")
-
-    actr.install_device(["speech", "microphone"])
-
-    robin_speaks(string='Hi there! [waving hand]')
-    
-    # print(actr.chunk_slot_value(actr.buffer_read('aural'), "content"))
-    # print(actr.chunk_slot_value(actr.buffer_read('goal'), "state"))
-
-    while True:
-        text = get_human_speech()   # retrieves human speech from mic, changes it to a string to be fed to ACT-R 
-        text_to_robot(text)
-        actr.run(TIME+10)
-        reset_actr()
-        if 'goodbye' in text:
-            break 
-
-    print('\n'.join(INTERACTIONS))
-    
 
 if __name__ == "__main__":
-    inner_speech()
+    # uncomment these lines to find mic index
+    # for index, name in enumerate(sr.Microphone.list_microphone_names()):
+    #     print("Microphone with name \"{1}\" found for `Microphone(device_index={0})`".format(index, name))
+    
+    mind = Mind(mic_index=0, sample_rate=48000) #, engine='google')
+    mind.inner_speech()

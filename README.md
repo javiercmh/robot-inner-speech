@@ -22,8 +22,10 @@ You can try the inner speech model by just running ACT-R, or by integrating it t
 ## Running inner speech model in ACT-R (without robot)
 
 To run ACT-R inner speech model, you need:
-   - ACT-R architecture ([standalone version](http://act-r.psy.cmu.edu/software/)) 
-   - Python 3
+    - ACT-R architecture ([standalone version](http://act-r.psy.cmu.edu/software/)) 
+    - Python 3
+    - Swig and Pulse audio for using `sphinx` for speech recognition (`sudo apt install swig libpulse-dev`)
+    - Install python dependencies with `pip install -r requirements.txt`
 
 Put the ACT-R folder in your preferred location.
 

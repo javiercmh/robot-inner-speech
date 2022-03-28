@@ -165,3 +165,10 @@ Robin: Okay, ciao! I wish you well.
 file is <speech_recognition.AudioData object at 0x7f5c507584e0>
 goodbye
 Human: goodbye
+DEBUG:root:[Inner speech model initialized]
+DEBUG:root:Robin: Hi there! [waving hand]
+DEBUG:root:[Inner speech model initialized]
+DEBUG:root:Robin: Hi there! [waving hand]
+DEBUG:root:[Inner speech model initialized]
+DEBUG:root:Robin: Hi there! [waving hand]
+DEBUG:root:[Waiting for human to speak:]
